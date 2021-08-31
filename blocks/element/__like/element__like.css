@@ -1,0 +1,12 @@
+.element__like {
+    min-width: 22px;
+    height: 19px;
+    background-image: url(../../../images/button-like-vector.svg);
+    background-position: center;
+    background-color: transparent;
+    border: none;
+    margin: 31px 30px 30px 0;
+    padding: 0;
+
+    
+}

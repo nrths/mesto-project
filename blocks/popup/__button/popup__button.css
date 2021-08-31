@@ -1,0 +1,10 @@
+.popup__button {
+    border: none;
+    padding: 0;
+    
+}
+
+.popup__button:hover {
+    opacity: .6;
+    transition: opacity .5s linear;
+}

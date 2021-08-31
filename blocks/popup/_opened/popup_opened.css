@@ -1,0 +1,4 @@
+.popup__opened {
+    /* visibility: visible; */
+    display: flex;
+}
