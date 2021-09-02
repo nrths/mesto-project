@@ -22,7 +22,6 @@
 
 @media (max-width: 600px) {
     .profile__description {
-        max-width: 282px;
         font-size: 14px;
         line-height: 17px;
         text-align: center;
