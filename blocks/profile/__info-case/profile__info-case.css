@@ -4,8 +4,9 @@
     align-items: center;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 720px) {
     .profile__info-case {
+        max-width: 282px;
         margin-bottom: 10px;
     }
     

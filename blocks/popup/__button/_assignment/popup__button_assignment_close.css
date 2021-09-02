@@ -11,6 +11,13 @@
     height: 32px;
 }
 
+.popup__button_assignment_close:hover {
+    color: #ffffff;
+    opacity: .6;
+    transition: color .5s linear;
+    cursor: pointer;
+}
+
 @media (max-width: 600px) {
     .popup__button_assignment_close {
         width: 20px;
