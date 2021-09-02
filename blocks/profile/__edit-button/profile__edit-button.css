@@ -4,13 +4,11 @@
     background-image: url(../../../images/profile-edit-button.svg);
     background-position: center;
     background-repeat: no-repeat;
-    
     background-color: transparent;
+    background-size: 10px 10px;
     border: 1px solid #ffffff;
     box-sizing: border-box;
-    margin-top: 15px;
     padding: 0;
-    
 }
 
 @media (max-width: 600px) {
@@ -19,7 +17,12 @@
        height: 18px;
        margin-top: 10px;
        background-size: 7.5px 7.5px;
-       
     }
-    
+}
+
+.profile__edit-button:hover {
+   color: #ffffff;
+   opacity: .6;
+   transition: color .5s linear;
+   cursor: pointer;
 }

@@ -1,24 +1,21 @@
-.popup__button_close {
+.popup__button_assignment_close {
     position: absolute;
-    left: 100%;
+    right: -10%;
     top: -40px;
-
     background-image: url(../../../../images/popup-close-icon.svg);
     background-position: center;
     background-repeat: no-repeat;
     background-color: transparent;
     background-size: contain;
-
     width: 32px;
     height: 32px;
 }
 
 @media (max-width: 600px) {
-    .popup__button_close {
+    .popup__button_assignment_close {
         width: 20px;
         height: 20px;
-
-        left: 90%;
+        right: 0;
         top: -36px;
     }
     

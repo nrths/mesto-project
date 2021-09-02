@@ -2,6 +2,13 @@
     margin: 67px auto 60px;
 }
 
+@media (max-width: 900px) {
+    .footer {
+        padding-left: 27px;
+    }
+    
+}
+
 @media (max-width: 600px) {
     .footer {
         margin: 48px auto 36px;

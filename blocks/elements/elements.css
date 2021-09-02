@@ -1,5 +1,4 @@
 .elements {
-    
     display: grid;
     grid-template-columns: repeat(3, 282px);
     grid-template-rows: repeat(2, 361px);
@@ -7,8 +6,20 @@
     margin: 0 auto;
 }
 
+@media (max-width: 900px) {
+    .elements {
+        max-width: 600px;
+        grid-template-columns: repeat(2, 282px);
+        grid-template-rows: repeat(3, 361px);
+        padding: 0 10px;
+    }
+    
+}
+
 @media (max-width: 600px) {
     .elements {
+        padding: 0;
+        max-width: 282px;
         grid-template-columns: 282px;
         grid-template-rows: repeat(6, 361px);
     }

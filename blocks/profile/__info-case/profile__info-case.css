@@ -1,0 +1,12 @@
+.profile__info-case {
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+}
+
+@media (max-width: 900px) {
+    .profile__info-case {
+        margin-bottom: 10px;
+    }
+    
+}

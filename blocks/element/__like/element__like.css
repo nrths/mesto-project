@@ -3,10 +3,16 @@
     height: 19px;
     background-image: url(../../../images/button-like-vector.svg);
     background-position: center;
+    background-repeat: no-repeat;
     background-color: transparent;
     border: none;
     margin: 31px 30px 30px 0;
     padding: 0;
+}
 
-    
+.element__like:hover {
+    color: #ffffff;
+    opacity: .6;
+    transition: color .5s linear;
+    cursor: pointer;
 }
