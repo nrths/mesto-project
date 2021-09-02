@@ -19,4 +19,4 @@
 * BEM Nested  
 * Media Queries  
 
-__GitHubPages:__ 
+__GitHubPages:__ https://nrths.github.io/mesto-project/
