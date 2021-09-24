@@ -1,0 +1,6 @@
+.popup__container_mode-card-show {
+    max-width: 75vw;
+    max-height: 75vh;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 0;
+}
