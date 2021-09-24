@@ -18,5 +18,6 @@
 * Animation  
 * BEM Nested  
 * Media Queries  
+* Java Script (ECMA2015)  
 
 __GitHubPages:__ https://nrths.github.io/mesto-project/
