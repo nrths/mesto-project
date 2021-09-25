@@ -1,10 +1,11 @@
 const profileContainer = document.querySelector('.profile');
-const popupContainer = document.querySelector('.popup');
 const profileEdit = document.querySelector('.popup__mode_profile-edit');
 
 const placeAdd = document.querySelector('.popup__mode_place-add');
 
 const cardShowPopup = document.querySelector('.popup__mode_card-show');
+const popupImage = cardShowPopup.querySelector('.popup__figure-image');
+const popupCaption = cardShowPopup.querySelector('.popup__figcaption');
 
 
 
@@ -20,14 +21,11 @@ function removeCard(evt) {
 function likeCard(evt) {
   evt.target.classList.toggle('element__like_active');
 } // функция лайка
-
-function showCard(popup, name, link) {
-  const popupImage =popup.querySelector('.popup__figure-image');
-  const popupCaption = popup.querySelector('.popup__figcaption');
-  popupImage.alt = name;
+function showCard(link, name) {
   popupImage.src = link;
+  popupImage.alt = name;
   popupCaption.textContent = name;
-  openPopupFunc(popup);
+  openPopupFunc(cardShowPopup);
 } // функция открытия модального окна с содержимым карточки
 
 const cardShowCloseButton = cardShowPopup.querySelector('.popup__button_assignment_close');
@@ -74,7 +72,7 @@ function makeNewCard(name, link) {
   cardImage.alt = name;
   cardCaption.textContent = name;
   // модальное окно карточки
-  cardImage.addEventListener('click', (evt) => showCard(cardShowPopup, evt.target.alt, evt.target.src));
+  cardImage.addEventListener('click', () => showCard(link, name)); 
   // лайк карточки
   const cardLike = newCard.querySelector('.element__like');
   cardLike.addEventListener('click', likeCard);
@@ -132,7 +130,7 @@ profileEditCloseButton.addEventListener('click', function () {
 });
 
 // закрытие модального окна редактирования личной информации с сохранением (до перезагрузки)
-const formElement = document.querySelector('.form');
+const profileEditForm = document.querySelector('.form[name="profile-edit-form"]');
 const nameInput = document.querySelector('.form__item[id="username"]');
 const descriptionInput = document.querySelector('.form__item[id="description"]');
 const saveButton = document.querySelector('.popup__button_assignment_save');
@@ -144,7 +142,7 @@ function submitHandlerForm (evt) {
   profileDescription.textContent = descriptionInput.value;
   closePopupFunc(profileEdit);
 }
-formElement.addEventListener('submit', submitHandlerForm);
+profileEditForm.addEventListener('submit', submitHandlerForm);
 
 
 
