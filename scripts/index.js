@@ -6,6 +6,7 @@ const placeAdd = document.querySelector('.popup__mode_place-add');
 const cardShowPopup = document.querySelector('.popup__mode_card-show');
 const popupImage = cardShowPopup.querySelector('.popup__figure-image');
 const popupCaption = cardShowPopup.querySelector('.popup__figcaption');
+const popups = document.querySelectorAll('.popup');
 
 
 
@@ -27,9 +28,27 @@ function showCard(link, name) {
   popupCaption.textContent = name;
   openPopupFunc(cardShowPopup);
 } // функция открытия модального окна с содержимым карточки
-
 const cardShowCloseButton = cardShowPopup.querySelector('.popup__button_assignment_close');
-cardShowCloseButton.addEventListener('click', () => closePopupFunc(cardShowPopup)); // закрытие модального окна с содержимым карточки
+cardShowCloseButton.addEventListener('click', () => closePopupFunc(cardShowPopup)); 
+// закрытие модального окна с содержимым карточки
+
+
+function closePopupOnEsc (evt) {
+  if (evt.key === 'Escape') {
+    closePopupFunc(document.querySelector('.popup_opened'));
+  }
+};
+document.addEventListener('keydown', closePopupOnEsc);
+// функция и слушатель закрытия попапа нажатием Esc
+
+popups.forEach((popup) => {
+  popup.addEventListener('click', (evt) => {
+    if (evt.target.classList.contains('popup__button_assignment_close') || evt.target.classList.contains('popup_opened')) {
+      closePopupFunc(popup);
+    };
+  });
+});
+// слушатель с условием закрытия по клику на оверлей и по кнопкам закрытия (почисти персональные закрытия по кнопкам)
 
 
 // базовые карточки
