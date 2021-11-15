@@ -1,4 +1,4 @@
-.popup__button_assignment_save {
+.popup__submit {
     width: 358px;
     height: 50px;
     border-radius: 2px;
@@ -11,20 +11,25 @@
     font-weight: 400;
 }
 
-.popup__button_assignment_save:hover {
+.popup__submit:hover {
     color: #ffffff;
     opacity: .6;
     transition: color .5s linear;
     cursor: pointer;
 }
 
+.popup__submit:disabled {
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, .2);
+    color: rgba(0, 0, 0, .2);
+}
+
 @media (max-width: 600px) {
-    .popup__button_assignment_save {
+    .popup__submit {
         width: 238px;
         height: 46px;
         font-size: 14px;
         line-height: 17px;
         margin-top: 15px;
-    }
-    
+    }  
 }

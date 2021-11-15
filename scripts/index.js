@@ -12,10 +12,12 @@ const popups = document.querySelectorAll('.popup');
 
 function openPopupFunc(popup) {
   popup.classList.add('popup_opened');
-}; // функция открытия модального окна
+  document.addEventListener('keydown', closePopupOnEsc);
+}; // функция открытия модального окна, добавление слушателя закрытия по esc
 function closePopupFunc(popup) {
   popup.classList.remove('popup_opened');
-} // функция закрытия модального окна
+  document.removeEventListener('keydown', closePopupOnEsc);
+} // функция закрытия модального окна, удаление слушателя закрытия по esc
 function removeCard(evt) {
   evt.target.closest('.element').remove();
 } // функция удаления карточки
@@ -38,8 +40,7 @@ function closePopupOnEsc (evt) {
     closePopupFunc(document.querySelector('.popup_opened'));
   }
 };
-document.addEventListener('keydown', closePopupOnEsc);
-// функция и слушатель закрытия попапа нажатием Esc
+// функция закрытия попапа нажатием Esc
 
 popups.forEach((popup) => {
   popup.addEventListener('click', (evt) => {
@@ -127,10 +128,12 @@ placeCloseButton.addEventListener('click', function () {
 const placeForm = placeAdd.querySelector('.form[name="place-add-form"]');
 const placeName = placeForm.querySelector('.form__item[name="place-name"]');
 const placeLink = placeForm.querySelector('.form__item[name="place-link"]');
-const placeSaveButton = placeAdd.querySelector('.popup__button_assignment_save');
+const placeSaveButton = placeAdd.querySelector('.popup__submit');
+
 placeSaveButton.addEventListener('click', (evt) => {
   evt.preventDefault();
   addNewCard(photoGrid, {name : placeName.value, link : placeLink.value});
+  placeForm.reset(); // работает
   closePopupFunc(placeAdd);
 });
 placeForm.addEventListener('submit', makeNewCard);
@@ -152,17 +155,25 @@ profileEditCloseButton.addEventListener('click', function () {
 const profileEditForm = document.querySelector('.form[name="profile-edit-form"]');
 const nameInput = document.querySelector('.form__item[id="username"]');
 const descriptionInput = document.querySelector('.form__item[id="description"]');
-const saveButton = document.querySelector('.popup__button_assignment_save');
+const saveButton = document.querySelector('.popup__submit');
 const profileUsername = document.querySelector('.profile__name');
 const profileDescription = document.querySelector('.profile__description');
+
 function submitHandlerForm (evt) {
   evt.preventDefault();
   profileUsername.textContent = nameInput.value;
   profileDescription.textContent = descriptionInput.value;
+  profileEditForm.reset(); // не видно, но работает
   closePopupFunc(profileEdit);
 }
 profileEditForm.addEventListener('submit', submitHandlerForm);
 
-
-
-
+import { enableValidation } from './validation.js'
+enableValidation({
+  formSelector: '.form',
+  inputSelector: '.form__item',
+  submitButtonSelector: '.popup__submit',
+  //errorClass: ,
+  //inactiveButtonClass: ,
+  inputErrorClass: 'form__item_type_error',
+}); 
