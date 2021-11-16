@@ -6,17 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="keywords" content="mesto russia"/>
     <meta name="author" content="north" />
-    <link rel="stylesheet" href="./pages/index.css">
+    <!--<link rel="stylesheet" href="./pages/index.css">-->
     <title>Mesto Russia</title>
 </head>
 <body class="base">
     <div class="page">
         <header class="header section">
-            <img src="./images/header-logo.svg" alt="Mesto Russia" class="header__logo">
+            <img src="<%=require('./images/header-logo.svg')%>" alt="Mesto Russia" class="header__logo">
         </header>
         <main class="content">
             <section class="profile section">
-                <img src="./images/avatar.jpg" alt="Avatar" class="profile__avatar">
+                <img src="<%=require('./images/avatar.jpg')%>" alt="Avatar" class="profile__avatar">
                 <div class="profile__info">
                     <div class="profile__info-case">
                         <h1 class="profile__name">Жак-Ив Кусто</h1>
@@ -92,7 +92,7 @@
         </li>
     </template>
     <!--<script src="scripts/validation.js"></script>
-    <script src="scripts/index.js"></script>-->
-    <script src="scripts/index.js" type="module"></script>
+    <script src="scripts/index.js"></script>
+    <script src="pages/index.js" type="module"></script>-->
 </body>
 </html>
