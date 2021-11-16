@@ -1,7 +1,7 @@
 // валидация форм
   
 // включение валидации полей ввода всех форм
- export const enableValidation = (config) => {
+export const enableValidation = (config) => {
 
   // проверка валидности всех полей ввода 
   const isFormValid = (inputList) => inputList
@@ -29,9 +29,9 @@
   // переключение состояния кнопки, в зависимости от валидности полей ввода
   const toggleButtonState = (submitButton, inputList) => {
     if (isFormValid(inputList)) {
-      submitButton.disabled = false;
+      enableSubmitButton(submitButton);
     } else {
-      submitButton.disabled = true;
+      disableSubmitButton(submitButton);
     };
   };
 
@@ -70,4 +70,12 @@
   formList.forEach((formElement) => {
     setEventListeners(formElement); // set evt lesteners each form
   });
+};
+
+export const enableSubmitButton = (submitButton) => {
+  submitButton.disabled = false;
+};
+
+export const disableSubmitButton = (submitButton) => {
+  submitButton.disabled = true;
 };

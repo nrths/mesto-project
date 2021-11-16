@@ -19,5 +19,6 @@
 * BEM Nested  
 * Media Queries  
 * Java Script (ECMA2015)  
+* Webpack Build
 
-__GitHubPages:__ https://nrths.github.io/mesto-project/
+__[GitHubPages](https://nrths.github.io/mesto-project/):__ Функционал не полный, обновляется.
