@@ -1,7 +1,7 @@
 import './index.css';
-import { initialCards } from '../components/constants.js';
+
 import { openPopupFunc, closePopupFunc } from '../components/modal.js';
-import { makeNewCard } from '../components/cards.js';
+import { handleLoadCard, makeNewCard } from '../components/cards.js';
 import { enableValidation, enableSubmitButton, disableSubmitButton } from '../components/validation.js';
 import { getCards, getUser, patchUser, patchAvatar, postCard } from '../components/api.js';
 
@@ -40,22 +40,26 @@ const avatarInput = editAvatar.querySelector('.form__item[id="new-avatar"]');
 const avatarSaveButton = editAvatar.querySelector('.popup__submit');
 
 
-const photoGrid = document.querySelector('.elements');
+
 const popups = document.querySelectorAll('.popup');
 let user = undefined;
 
 
 Promise.all([getCards(), getUser()])
-  .then(([cardsData, userData]) => {
-    console.log(cardsData, userData);
-    console.log(userData._id);
-    cardsData.reverse();
-    
-    addNewCard(photoGrid, cardsData, userData);
+.then(([cardsData, userData]) => {
+  console.log(cardsData, userData);
+  //console.log(userData._id);
+  cardsData.reverse();
+  cardsData.forEach((cardData) => {
+    user = userData; // переназначаем, потому что форма добавления не знает какой юзер и ищет глобально
+    handleLoadCard(makeNewCard(cardData, userData));
     updateProfile(userData.name, userData.about, userData.avatar);
   })
-  .catch((err) => console.log(err));
   
+  
+})
+.catch((err) => console.log(err));
+
 
 // обновление данных в профиле
 function updateProfile(name, about, avatar) {
@@ -88,12 +92,6 @@ profileEditForm.addEventListener('submit', (evt) => {
     });   
 });
 
-// функция добавления карточки в панель
-function addNewCard(photoGrid, cardsData) {
-  cardsData.forEach((cardData, userData) => {
-    photoGrid.prepend(makeNewCard(cardData, userData));
-  });
-}
 
 // модальное окно добавления карточки
 // открытие
@@ -106,8 +104,8 @@ placeAddButton.addEventListener('click', function () {
 placeForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   placeSaveButton.textContent = 'Создание...';
-  postCard({'name': placeName.value, 'link': placeLink.value}).then((cardData) => {
-  photoGrid.prepend(makeNewCard(cardData));
+  postCard({'name': placeName.value, 'link': placeLink.value}).then((res) => {
+  handleLoadCard(makeNewCard(res, user)); // при создании карточки получает значение переменной user из промис.олл
   closePopupFunc(placeAdd);
   placeForm.reset();
   })
