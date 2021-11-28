@@ -5,15 +5,6 @@ import { handleLoadCard, makeNewCard } from '../components/cards.js';
 import { enableValidation, enableSubmitButton, disableSubmitButton } from '../components/validation.js';
 import { getCards, getUser, patchUser, patchAvatar, postCard } from '../components/api.js';
 
-enableValidation({
-  formSelector: '.form',
-  inputSelector: '.form__item',
-  submitButtonSelector: '.popup__submit',
-  //errorClass: ,
-  //inactiveButtonClass: ,
-  inputErrorClass: 'form__item_type_error',
-}); 
-
 const profileContainer = document.querySelector('.profile');
 const placeAddButton = profileContainer.querySelector('.profile__add-button');
 const editButton = profileContainer.querySelector('.profile__edit-button');
@@ -39,24 +30,28 @@ const editAvatarForm = editAvatar.querySelector('.form[name="avatar-edit-form"]'
 const avatarInput = editAvatar.querySelector('.form__item[id="new-avatar"]');
 const avatarSaveButton = editAvatar.querySelector('.popup__submit');
 
-
-
 const popups = document.querySelectorAll('.popup');
 let user = undefined;
 
 
+enableValidation({
+  formSelector: '.form',
+  inputSelector: '.form__item',
+  submitButtonSelector: '.popup__submit',
+  //errorClass: ,
+  //inactiveButtonClass: ,
+  inputErrorClass: 'form__item_type_error',
+}); 
+
 Promise.all([getCards(), getUser()])
 .then(([cardsData, userData]) => {
   console.log(cardsData, userData);
-  //console.log(userData._id);
   cardsData.reverse();
   cardsData.forEach((cardData) => {
     user = userData; // переназначаем, потому что форма добавления не знает какой юзер и ищет глобально
     handleLoadCard(makeNewCard(cardData, userData));
     updateProfile(userData.name, userData.about, userData.avatar);
-  })
-  
-  
+  }) 
 })
 .catch((err) => console.log(err));
 

@@ -73,12 +73,27 @@ const postCard = (card) => {
 };
 
 // удаление карточки
-const deleteCard = (card) => {
-    return fetch(`${config.baseUrl}/cards/` + card._id, {
+const deleteCard = (id) => {
+    return fetch(`${config.baseUrl}/cards/${id}`, {
+        method: 'DELETE',
+        headers: config.headers,
+    }).then(getResponse)
+};
+
+// лайки
+const putLike = (id) => {
+    return fetch(`${config.baseUrl}/cards/likes/${id}`, {
+        method: 'PUT',
+        headers: config.headers,
+    }).then(getResponse)
+};
+
+const deleteLike = (id) => {
+    return fetch(`${config.baseUrl}/cards/likes/${id}`, {
         method: 'DELETE',
         headers: config.headers,
     }).then(getResponse)
 };
 
 
-export { getResponse, getUser, patchUser, patchAvatar, getCards, postCard, deleteCard }
+export { getResponse, getUser, patchUser, patchAvatar, getCards, postCard, deleteCard, putLike, deleteLike }
