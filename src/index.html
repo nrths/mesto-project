@@ -16,18 +16,21 @@
         </header>
         <main class="content">
             <section class="profile section">
-                <img src="<%=require('./images/avatar.jpg')%>" alt="Avatar" class="profile__avatar">
+                <div class="profile__avatar-case">
+                    <img src="<%=require('./images/avatar.jpg')%>" alt="Avatar" class="profile__avatar">
+                    <button type="button" class="profile__avatar-edit-button"></button>
+                </div>
                 <div class="profile__info">
                     <div class="profile__info-case">
-                        <h1 class="profile__name">Жак-Ив Кусто</h1>
+                        <h1 class="profile__name"></h1>
                         <button type="button" class="profile__edit-button"></button>
                     </div>
-                    <p class="profile__description">Исследователь океана</p>
+                    <p class="profile__description"></p>
                 </div>
                 <button type="button" class="profile__add-button"></button>
             </section>
-            <section class="photo-grid section">
-                <ul class="elements"></ul>
+            <section class="elements section">
+                
             </section>
         </main>
         <section class="popup popup__mode_profile-edit">
@@ -77,22 +80,45 @@
                 </figure>
             </div>
         </section>
+        <section class="popup popup__mode_avatar-edit">
+            <div class="popup__container">
+                <h2 class="popup__title">Обновить аватар</h2>
+                <button class="popup__button popup__button_assignment_close"></button>
+                <form action="#" name="avatar-edit-form" class="form" novalidate>
+                    <fieldset class="form__fieldset">
+                        <input type="url" name="avatar-link" id="new-avatar" class="form__item"
+                        placeholder="Ссылка на новый аватар" required>
+                        <span class="form_item-error" id="new-avatar-error"></span>
+                    </fieldset>
+                    <fieldset class="form__fieldset">
+                        <button type="submit" class="popup__button popup__submit popup__submit_mode_avatar-edit">Сохранить</button>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+        <section class="popup popup__mode_accept-delete">
+            <div class="popup__container">
+                <h2 class="popup__title">Вы уверены?</h2>
+                <button class="popup__button popup__button_assignment_close"></button>
+                <button type="submit" class="popup__button popup__submit">Да</button>
+            </div>
+        </section>
         <footer class="footer section">
             <p class="footer__paragraph">&copy; 2020 Mesto Russia</p>
         </footer>
     </div>
     <template id="elements-item">
-        <li class="element">
+        <article class="element">
             <button type="button" class="element__delete-button"></button>
             <img class="element__image">
             <div class="element__caption">
                 <p class="element__title"></p>
-                <button type="button" class="element__like"></button>
+                <div class="element__like-case">
+                    <button type="button" class="element__like"></button>
+                    <span class="element__like-count"></span>
+                </div>
             </div>
-        </li>
+        </article>
     </template>
-    <!--<script src="scripts/validation.js"></script>
-    <script src="scripts/index.js"></script>
-    <script src="pages/index.js" type="module"></script>-->
 </body>
 </html>

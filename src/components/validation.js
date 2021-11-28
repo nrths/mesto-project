@@ -71,7 +71,7 @@ export const enableValidation = (config) => {
     setEventListeners(formElement); // set evt lesteners each form
   });
 };
-
+ // состояние кнопок
 export const enableSubmitButton = (submitButton) => {
   submitButton.disabled = false;
 };

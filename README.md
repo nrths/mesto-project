@@ -21,4 +21,4 @@
 * Java Script (ECMA2015)  
 * Webpack Build
 
-__[GitHubPages](https://nrths.github.io/mesto-project/):__ Функционал не полный, обновляется.
+__[GitHubPages](https://nrths.github.io/mesto-project/)__ 
