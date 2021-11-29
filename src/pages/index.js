@@ -3,7 +3,7 @@ import './index.css';
 import { openPopupFunc, closePopupFunc } from '../components/modal.js';
 import { handleLoadCard, makeNewCard } from '../components/cards.js';
 import { enableValidation, enableSubmitButton, disableSubmitButton } from '../components/validation.js';
-import { getCards, getUser, patchUser, patchAvatar, postCard } from '../components/api.js';
+import { getCards, getUser, patchUser, patchAvatar, postCard, deleteCard } from '../components/api.js';
 
 const profileContainer = document.querySelector('.profile');
 const placeAddButton = profileContainer.querySelector('.profile__add-button');
@@ -29,6 +29,9 @@ const editAvatar = document.querySelector('.popup__mode_avatar-edit');
 const editAvatarForm = editAvatar.querySelector('.form[name="avatar-edit-form"]');
 const avatarInput = editAvatar.querySelector('.form__item[id="new-avatar"]');
 const avatarSaveButton = editAvatar.querySelector('.popup__submit');
+
+const cardDeleteAccept = document.querySelector('.popup__mode_accept-delete');
+const cardDeleteAcceptSubmit = cardDeleteAccept.querySelector('.popup__submit');
 
 const popups = document.querySelectorAll('.popup');
 let user = undefined;
@@ -130,8 +133,27 @@ editAvatarForm.addEventListener('submit', (evt) => {
 });
 
 // модальное окно подтверждения удаления карточки
-// закрытие с подтверждением удаления и удалением карточки
+// открытие, назначение атрибутов
+export function handleDeleteCard (evt) {
+  openPopupFunc(cardDeleteAccept);
+  const card = evt.target.closest('.element');
+  const cardID = card.getAttribute('id', cardID);
 
+  cardDeleteAccept.setAttribute('id', cardID);
+}
+
+// закрытие с подтверждением удаления и удалением карточки
+function affirmDeleteCard () {
+  const cardID = cardDeleteAccept.getAttribute('id');
+  const card = document.getElementById(`${cardID}`);
+  deleteCard(cardID).then((res) => {
+    console.log(res);
+    card.remove();
+    closePopupFunc(cardDeleteAccept);
+  })
+  .catch((err) => console.log(err));
+};
+cardDeleteAcceptSubmit.addEventListener('click', affirmDeleteCard);
 
 // слушатель с условием закрытия по клику на оверлей и по кнопкам закрытия
 popups.forEach((popup) => {
