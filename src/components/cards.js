@@ -1,8 +1,8 @@
-import { deleteCard, putLike, deleteLike } from "./api.js";
-import { openPopupFunc } from "./modal.js";
+import {  putLike, deleteLike } from "./api.js";
+import {  openPopupFunc } from "./modal.js";
+import { handleDeleteCard } from "../pages/index.js";
 
 const photoGrid = document.querySelector('.elements');
-// const cardDeleteAccept = document.querySelector('.popup__mode_accept-delete');
 
 const cardShowPopup = document.querySelector('.popup__mode_card-show');
 const popupImage = cardShowPopup.querySelector('.popup__figure-image');
@@ -37,6 +37,7 @@ function makeNewCard(cardData, userData) {
   cardImage.alt = cardData.name;
   cardCaption.textContent = cardData.name;
   cardLikeCounter.textContent = cardData.likes.length;
+  newCard.setAttribute('id', cardData._id);
 
   // модальное окно карточки
   cardImage.addEventListener('click', () => showCard(cardData));
@@ -77,14 +78,7 @@ function makeNewCard(cardData, userData) {
   if (cardData.owner._id !== userData._id) {
     cardDeleteButton.style.display = 'none';
   }
-  cardDeleteButton.addEventListener('click', () => {
-    console.log(cardData._id);
-    deleteCard(cardData).then((res) => {
-      console.log(res);
-      cardDeleteButton.closest('.element').remove();
-    })
-    .catch((err) => console.log(err));
-  });
+  cardDeleteButton.addEventListener('click', (evt) => handleDeleteCard(evt));
   
   return newCard;
 }
