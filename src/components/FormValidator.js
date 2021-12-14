@@ -6,6 +6,10 @@ export default class FormValidator {
         this._inputErrorClass = config._inputErrorClass;
     }
 
+    enableValidation () {
+      this._setEventListeners();
+    }
+
     // проверка валидности всех полей ввода (проверить аргумент)
   _isFormValid (_inputList) {
       this._inputList.every(inputElement => inputElement.validity.valid);
@@ -26,7 +30,7 @@ export default class FormValidator {
   };
 
   // переключение состояния кнопки, в зависимости от валидности полей ввода
-  _toggleButtonState = () => {
+  _toggleButtonState () {
     if (isFormValid(_inputList)) {
         this._button.disabled = false;
     } else {
@@ -44,7 +48,7 @@ export default class FormValidator {
   };
 
   // добавление слушателей всем полям ввода
-  _setEventListeners = () => {
+  _setEventListeners () {
     this._toggleButtonState();
     this._element.addEventListener('submit', evt => {
       evt.preventDefault();
