@@ -70,7 +70,7 @@ function makeNewCard(cardData, userData) {
         }))
         .catch((err) => console.log(err));
       }
-    }
+  }
   cardLike.addEventListener('click', (evt) => switchLikes(cardData, evt))
  
   // удаление карточки
