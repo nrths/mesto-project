@@ -1,9 +1,17 @@
+const api = new Api ({
+    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
+    headers: {
+        authorization: '3874ec8d-d96c-4b9e-9955-f2d143817211',
+        'Content-type': 'application/json',
+    },
+  });
+
 import './index.css';
 
 import { openPopupFunc, closePopupFunc } from '../components/modal.js';
 import { handleLoadCard, makeNewCard } from '../components/cards.js';
 import { enableValidation, enableSubmitButton, disableSubmitButton } from '../components/validation.js';
-import { getCards, getUser, patchUser, patchAvatar, postCard, deleteCard } from '../components/api.js';
+import Api from '../components/api.js';
 
 const profileContainer = document.querySelector('.profile');
 const placeAddButton = profileContainer.querySelector('.profile__add-button');
