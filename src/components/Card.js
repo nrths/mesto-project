@@ -1,12 +1,17 @@
 export default class Card {
-    constructor({ link, name, _id, likes, owner }, userId, { handleCardClick, handleLikeClick, handleDeleteButtonClick }, selector) {
+    constructor({ link, name, _id, likes, owner }, userId, 
+      { handleCardClick, handleLikeClick, handleDeleteButtonClick }, 
+      selector) {
         this._link = link;
         this._name = name;
         this._id = _id;
         this._likes = likes;
         this.owner = owner;
+        this.userId = userId;
         this.selector = selector;
-        this.handleCardClick = handleCardClick;
+        this._handleCardClick = handleCardClick;
+        this._handleLikeClick = handleLikeClick;
+        this._handleDeleteButtonClick = handleDeleteButtonClick;
         this._element = this._getElement();
         this._elementImage =  this._element.querySelector('.element__image');
         this._elementTitle = this._element.querySelector('.element__title');
@@ -17,13 +22,25 @@ export default class Card {
     
     _getElement() {
         
-        const cardElement = document
+      const cardElement = document
         .querySelector(this._selector) //'#elements-item';
         .content
         .querySelector('.element')
         .cloneNode(true);
       
-        return cardElement;
+      return cardElement;
+    }
+
+    _setEventListeners() {
+      this._elementImage.addEventListener('click', () => {
+        this._handleCardClick()
+      });
+      this._elementLike.addEventListener('click', () => {
+        this._handleLikeClick();
+      });
+      this._elementDeleteButton.addEventListener('click', () => {
+        this._handleDeleteButtonClick();
+      })
     }
 
     generate() {
@@ -33,7 +50,11 @@ export default class Card {
 
         this._spotLikeInitState();
 
+        if (this.owner._id !== this.userId._id) {
+          this._elementDeleteButton.style.display = 'none';
+        }
 
+        this._setEventListeners();
         return this._element;
     }
 
@@ -47,25 +68,6 @@ export default class Card {
         if (spotLikeInitState) {
             this._elementLike.classList.add('element__like_active');
         }
-    }
-    _switchLikes (cardData, evt) {
-        const cardID = cardData._id;
-          if (evt.target.classList.contains('element__like_active')) {
-          deleteLike(cardID)
-            .then((res) => {
-              evt.target.classList.remove('element__like_active');
-              cardLikeCounter.textContent = res.likes.length;
-            })
-            .catch((err) => console.log(err));
-        } else {
-          putLike(cardID)
-            .then((res => {
-              evt.target.classList.add('element__like_active');
-              cardLikeCounter.textContent = res.likes.length;
-            }))
-            .catch((err) => console.log(err));
-          }
-      }
-      
+    }  
     
 }

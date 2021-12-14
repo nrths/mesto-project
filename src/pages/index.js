@@ -141,7 +141,7 @@ editAvatarForm.addEventListener('submit', (evt) => {
 });
 
 // модальное окно подтверждения удаления карточки
-// открытие, назначение атрибутов
+// открытие, назначение атрибутов = handleDeleteButtonClick
 export function handleDeleteCard (evt) {
   openPopupFunc(cardDeleteAccept);
   const card = evt.target.closest('.element');
