@@ -4,12 +4,12 @@ export default class Api {
         this._headers = headers;
     }
 
-    _getResponse = (res) => {
-        if (res.ok) {
-          return res.json();
-        } else {
-          return Promise.reject(`Ошибка: ${res.status}`);
-    }
+    // _getResponse = (res) => {
+    //     if (res.ok) {
+    //       return res.json();
+    //     } else {
+    //       return Promise.reject(`Ошибка: ${res.status}`);
+    // }
 
     getUser() {
         return fetch(`${this._baseUrl}/users/me`, { 
