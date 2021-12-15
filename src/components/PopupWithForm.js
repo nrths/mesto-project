@@ -1,4 +1,4 @@
-import { every } from 'core-js/core/array';
+
 import Popup from './Popup.js'
 
 export default class PopupWithForm extends Popup {
