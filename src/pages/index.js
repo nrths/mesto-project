@@ -23,15 +23,51 @@ const api = new Api ({
     aboutSelector: '.profile__description',
     avatarSelector: '.profile__avatar',
   });
+  
+  const popupImg = new PopupWithImage('.popup__mode_card-show');
+  popupImg.setEventListeners();
+
   const promises = [api.getCards(), api.getUser()];
   Promise.all([api.getCards(), api.getUser()])
   .then(([cardsData, userData]) => {
     console.log(cardsData, userData);
-    cardsData.reverse();
     initialUserInfo.renderUserInfo(userData);
+    cardsData.reverse();
+    
+    const section = new Section({cardsData, 
+      renderer: (item) => {
+        const card = new Card(item, userData._id, {
+          handleCardClick:(item) => {
+            popupImg.open(item)
+            
+          },
+        handleLikeClick:(item, evt) => {
+        
+            const cardID = item._id;
+              if (evt.target.classList.contains('element__like_active')) {
+              deleteLike(cardID)
+                .then((res) => {
+                  evt.target.classList.remove('element__like_active');
+                  cardLikeCounter.textContent = res.likes.length;
+                })
+                .catch((err) => console.log(err));
+            } else {
+              putLike(cardID)
+                .then((res => {
+                  evt.target.classList.add('element__like_active');
+                  cardLikeCounter.textContent = res.likes.length;
+                }))
+                .catch((err) => console.log(err));
+          }},
+        handleDeleteButtonClick:() => {
+          
+        }}, '.elements')
+    
+    }
+
   })
-    .catch((err) => console.log(err));
-  
+    // .catch((err) => console.log(err));
+  }
 
 
 
