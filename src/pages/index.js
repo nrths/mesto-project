@@ -1,3 +1,17 @@
+import './index.css';
+import { openPopupFunc, closePopupFunc } from '../components/modal.js';
+import { handleLoadCard, makeNewCard } from '../components/cards.js';
+import { enableValidation, enableSubmitButton, disableSubmitButton } from '../components/validation.js';
+import Api from '../components/api.js';
+import Card from '../components/Card.js';
+import FormValidator from '../components/FormValidator.js';
+import Popup from '../components/Popup';
+import PopupWithForm from '../components/PopupWithForm.js';
+import PopupWithImage from '../components/PopupWithImage.js';
+import Section from '../components/Section.js';
+import UserInfo from '../components/UserInfo.js';
+import {profileEdit, editAvatar, cardDeleteAccept, popups, placeAdd, profileContainer} from '../utils/constants.js';
+
 const api = new Api ({
     baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
     headers: {
@@ -6,42 +20,17 @@ const api = new Api ({
     },
   });
 
-import './index.css';
+  const promises = [api.getCards(), api.getUser()];
+  Promise.all(promises)
+//тут нужно что-то написать
 
-import { openPopupFunc, closePopupFunc } from '../components/modal.js';
-import { handleLoadCard, makeNewCard } from '../components/cards.js';
-import { enableValidation, enableSubmitButton, disableSubmitButton } from '../components/validation.js';
-import Api from '../components/api.js';
 
-const profileContainer = document.querySelector('.profile');
-const placeAddButton = profileContainer.querySelector('.profile__add-button');
-const editButton = profileContainer.querySelector('.profile__edit-button');
-const profileAvatar = profileContainer.querySelector('.profile__avatar');
-const avatarEditButton = profileContainer.querySelector('.profile__avatar-edit-button');
 
-const placeAdd = document.querySelector('.popup__mode_place-add');
-const placeForm = placeAdd.querySelector('.form[name="place-add-form"]');
-const placeName = placeForm.querySelector('.form__item[name="place-name"]');
-const placeLink = placeForm.querySelector('.form__item[name="place-link"]');
-const placeSaveButton = placeAdd.querySelector('.popup__submit');
 
-const profileEdit = document.querySelector('.popup__mode_profile-edit');
-const profileEditForm = profileEdit.querySelector('.form[name="profile-edit-form"]');
-const nameInput = profileEditForm.querySelector('.form__item[id="username"]');
-const descriptionInput = profileEditForm.querySelector('.form__item[id="description"]');
-const profileUsername = document.querySelector('.profile__name');
-const profileDescription = document.querySelector('.profile__description');
-const profileSubmitButton = profileEdit.querySelector('.popup__submit');
 
-const editAvatar = document.querySelector('.popup__mode_avatar-edit');
-const editAvatarForm = editAvatar.querySelector('.form[name="avatar-edit-form"]');
-const avatarInput = editAvatar.querySelector('.form__item[id="new-avatar"]');
-const avatarSaveButton = editAvatar.querySelector('.popup__submit');
 
-const cardDeleteAccept = document.querySelector('.popup__mode_accept-delete');
-const cardDeleteAcceptSubmit = cardDeleteAccept.querySelector('.popup__submit');
 
-const popups = document.querySelectorAll('.popup');
+
 let user = undefined;
 
 
