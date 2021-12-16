@@ -8,10 +8,14 @@ export default class UserInfo {
     getUserInfo() {
         const name = this._nameElement.textContent;
         const about = this._aboutElement.textContent;
-        this._profileArray = {};
-        this._profileArray.name = name;
-        this._profileArray.about = about;
-        return this._profileArray;
+        
+        return { name, about };
+    }
+
+    renderUserInfo(user) {
+        this._nameElement.textContent = user.name;
+        this._aboutElement.textContent = user.about;
+        this._avatarElement.src = user.avatar;
     }
 
     setUserInfo(name, about, avatar) {
@@ -21,9 +25,9 @@ export default class UserInfo {
     }
 
     // может не надо?
-    getId() {
-        return this._id = userId;
-    }
+    // getId() {
+    //     return this._id = userId;
+    // }
     
 
     

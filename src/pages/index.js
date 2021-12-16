@@ -1,7 +1,5 @@
 import './index.css';
-import { openPopupFunc, closePopupFunc } from '../components/modal.js';
-import { handleLoadCard, makeNewCard } from '../components/cards.js';
-import { enableValidation, enableSubmitButton, disableSubmitButton } from '../components/validation.js';
+
 import Api from '../components/api.js';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
@@ -20,9 +18,20 @@ const api = new Api ({
     },
   });
 
+  const initialUserInfo = new UserInfo({
+    nameSelector: '.profile__name',
+    aboutSelector: '.profile__description',
+    avatarSelector: '.profile__avatar',
+  });
   const promises = [api.getCards(), api.getUser()];
-  Promise.all(promises)
-//тут нужно что-то написать
+  Promise.all([api.getCards(), api.getUser()])
+  .then(([cardsData, userData]) => {
+    console.log(cardsData, userData);
+    cardsData.reverse();
+    initialUserInfo.renderUserInfo(userData);
+  })
+    .catch((err) => console.log(err));
+  
 
 
 
@@ -34,129 +43,129 @@ const api = new Api ({
 let user = undefined;
 
 
-enableValidation({
-  formSelector: '.form',
-  inputSelector: '.form__item',
-  submitButtonSelector: '.popup__submit',
-  //errorClass: ,
-  //inactiveButtonClass: ,
-  inputErrorClass: 'form__item_type_error',
-}); 
+// enableValidation({
+//   formSelector: '.form',
+//   inputSelector: '.form__item',
+//   submitButtonSelector: '.popup__submit',
+//   //errorClass: ,
+//   //inactiveButtonClass: ,
+//   inputErrorClass: 'form__item_type_error',
+// }); 
 
-Promise.all([getCards(), getUser()])
-.then(([cardsData, userData]) => {
-  console.log(cardsData, userData);
-  cardsData.reverse();
-  cardsData.forEach((cardData) => {
-    user = userData; // переназначаем, потому что форма добавления не знает какой юзер и ищет глобально
-    handleLoadCard(makeNewCard(cardData, userData));
-    updateProfile(userData.name, userData.about, userData.avatar);
-  }) 
-})
-.catch((err) => console.log(err));
-
-
-// обновление данных в профиле
-function updateProfile(name, about, avatar) {
-  profileUsername.textContent = name;
-  profileDescription.textContent = about;
-  profileAvatar.src = avatar;
-};
-
-// открытие модального окна редактирования личной информации
-editButton.addEventListener('click', function () {
-  openPopupFunc(profileEdit);
-  nameInput.value = profileUsername.textContent;
-  descriptionInput.value = profileDescription.textContent;
-  enableSubmitButton(profileSubmitButton);
-});
-
-// сохранение личной информации и закрытие модального окна
-profileEditForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  profileSubmitButton.textContent = 'Сохранение...';
-  patchUser(nameInput.value, descriptionInput.value)
-    .then((res) => {
-      updateProfile(res.name, res.about, res.avatar);
-      closePopupFunc(profileEdit);
-      profileEditForm.reset();
-  })
-    .catch((err) => alert(err))
-    .finally(() => {
-      profileSubmitButton.textContent = 'Сохранить';
-    });   
-});
+// Promise.all([getCards(), getUser()])
+// .then(([cardsData, userData]) => {
+//   console.log(cardsData, userData);
+//   cardsData.reverse();
+//   cardsData.forEach((cardData) => {
+//     user = userData; // переназначаем, потому что форма добавления не знает какой юзер и ищет глобально
+//     handleLoadCard(makeNewCard(cardData, userData));
+//     updateProfile(userData.name, userData.about, userData.avatar);
+//   }) 
+// })
+// .catch((err) => console.log(err));
 
 
-// модальное окно добавления карточки
-// открытие
-placeAddButton.addEventListener('click', function () {
-  openPopupFunc(placeAdd);
-  disableSubmitButton(placeSaveButton);
-});
+// // обновление данных в профиле
+// function updateProfile(name, about, avatar) {
+//   profileUsername.textContent = name;
+//   profileDescription.textContent = about;
+//   profileAvatar.src = avatar;
+// };
 
-// закрытие с добавлением карточки
-placeForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  placeSaveButton.textContent = 'Создание...';
-  postCard({'name': placeName.value, 'link': placeLink.value}).then((res) => {
-  handleLoadCard(makeNewCard(res, user)); // при создании карточки получает значение переменной user из промис.олл
-  closePopupFunc(placeAdd);
-  placeForm.reset();
-  })
-  .catch((err) => console.log(err))
-  .finally(() => placeSaveButton.textContent = 'Создать');
-});
+// // открытие модального окна редактирования личной информации
+// editButton.addEventListener('click', function () {
+//   openPopupFunc(profileEdit);
+//   nameInput.value = profileUsername.textContent;
+//   descriptionInput.value = profileDescription.textContent;
+//   enableSubmitButton(profileSubmitButton);
+// });
 
-// модальное окно обновления аватара
-// открытие
-avatarEditButton.addEventListener('click', function () {
-  openPopupFunc(editAvatar);
-  disableSubmitButton(avatarSaveButton);
-})
+// // сохранение личной информации и закрытие модального окна
+// profileEditForm.addEventListener('submit', (evt) => {
+//   evt.preventDefault();
+//   profileSubmitButton.textContent = 'Сохранение...';
+//   patchUser(nameInput.value, descriptionInput.value)
+//     .then((res) => {
+//       updateProfile(res.name, res.about, res.avatar);
+//       closePopupFunc(profileEdit);
+//       profileEditForm.reset();
+//   })
+//     .catch((err) => alert(err))
+//     .finally(() => {
+//       profileSubmitButton.textContent = 'Сохранить';
+//     });   
+// });
 
-// закрытие с изменением аватара
-editAvatarForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  avatarSaveButton.textContent = 'Сохранение...';
-  patchAvatar(avatarInput.value)
-    .then((res) => {
-      profileAvatar.src = res.avatar;
-      closePopupFunc(editAvatar);
-      editAvatarForm.reset();
-    })
-    .catch((err) => console.log(err))
-    .finally(() => avatarSaveButton.textContent = 'Сохранить')
-});
 
-// модальное окно подтверждения удаления карточки
-// открытие, назначение атрибутов = handleDeleteButtonClick
-export function handleDeleteCard (evt) {
-  openPopupFunc(cardDeleteAccept);
-  const card = evt.target.closest('.element');
-  const cardID = card.getAttribute('id', cardID);
+// // модальное окно добавления карточки
+// // открытие
+// placeAddButton.addEventListener('click', function () {
+//   openPopupFunc(placeAdd);
+//   disableSubmitButton(placeSaveButton);
+// });
 
-  cardDeleteAccept.setAttribute('id', cardID);
-}
+// // закрытие с добавлением карточки
+// placeForm.addEventListener('submit', (evt) => {
+//   evt.preventDefault();
+//   placeSaveButton.textContent = 'Создание...';
+//   postCard({'name': placeName.value, 'link': placeLink.value}).then((res) => {
+//   handleLoadCard(makeNewCard(res, user)); // при создании карточки получает значение переменной user из промис.олл
+//   closePopupFunc(placeAdd);
+//   placeForm.reset();
+//   })
+//   .catch((err) => console.log(err))
+//   .finally(() => placeSaveButton.textContent = 'Создать');
+// });
 
-// закрытие с подтверждением удаления и удалением карточки
-function affirmDeleteCard () {
-  const cardID = cardDeleteAccept.getAttribute('id');
-  const card = document.getElementById(`${cardID}`);
-  deleteCard(cardID).then((res) => {
-    console.log(res);
-    card.remove();
-    closePopupFunc(cardDeleteAccept);
-  })
-  .catch((err) => console.log(err));
-};
-cardDeleteAcceptSubmit.addEventListener('click', affirmDeleteCard);
+// // модальное окно обновления аватара
+// // открытие
+// avatarEditButton.addEventListener('click', function () {
+//   openPopupFunc(editAvatar);
+//   disableSubmitButton(avatarSaveButton);
+// })
 
-// слушатель с условием закрытия по клику на оверлей и по кнопкам закрытия
-popups.forEach((popup) => {
-  popup.addEventListener('click', (evt) => {
-    if (evt.target.classList.contains('popup__button_assignment_close') || evt.target.classList.contains('popup_opened')) {
-      closePopupFunc(popup);
-    };
-  });
-});
+// // закрытие с изменением аватара
+// editAvatarForm.addEventListener('submit', (evt) => {
+//   evt.preventDefault();
+//   avatarSaveButton.textContent = 'Сохранение...';
+//   patchAvatar(avatarInput.value)
+//     .then((res) => {
+//       profileAvatar.src = res.avatar;
+//       closePopupFunc(editAvatar);
+//       editAvatarForm.reset();
+//     })
+//     .catch((err) => console.log(err))
+//     .finally(() => avatarSaveButton.textContent = 'Сохранить')
+// });
+
+// // модальное окно подтверждения удаления карточки
+// // открытие, назначение атрибутов = handleDeleteButtonClick
+// export function handleDeleteCard (evt) {
+//   openPopupFunc(cardDeleteAccept);
+//   const card = evt.target.closest('.element');
+//   const cardID = card.getAttribute('id', cardID);
+
+//   cardDeleteAccept.setAttribute('id', cardID);
+// }
+
+// // закрытие с подтверждением удаления и удалением карточки
+// function affirmDeleteCard () {
+//   const cardID = cardDeleteAccept.getAttribute('id');
+//   const card = document.getElementById(`${cardID}`);
+//   deleteCard(cardID).then((res) => {
+//     console.log(res);
+//     card.remove();
+//     closePopupFunc(cardDeleteAccept);
+//   })
+//   .catch((err) => console.log(err));
+// };
+// cardDeleteAcceptSubmit.addEventListener('click', affirmDeleteCard);
+
+// // слушатель с условием закрытия по клику на оверлей и по кнопкам закрытия
+// popups.forEach((popup) => {
+//   popup.addEventListener('click', (evt) => {
+//     if (evt.target.classList.contains('popup__button_assignment_close') || evt.target.classList.contains('popup_opened')) {
+//       closePopupFunc(popup);
+//     };
+//   });
+// });

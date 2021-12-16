@@ -25,5 +25,6 @@ export default class Popup {
             if (evt.target.classList.contains('popup__button_assignment_close') || evt.target.classList.contains('popup_opened')) {
               this.close();
             };
+        });
     }
-}
+};
