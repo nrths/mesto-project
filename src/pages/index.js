@@ -3,80 +3,75 @@ import './index.css';
 import Api from '../components/api.js';
 import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
-import Popup from '../components/Popup';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import {profileEdit, editAvatar, cardDeleteAccept, popups, placeAdd, profileContainer} from '../utils/constants.js';
+let user = undefined;
 
 const api = new Api ({
-    baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
-    headers: {
-        authorization: '3874ec8d-d96c-4b9e-9955-f2d143817211',
-        'Content-type': 'application/json',
-    },
-  });
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
+  headers: {
+      authorization: '3874ec8d-d96c-4b9e-9955-f2d143817211',
+      'Content-type': 'application/json',
+  },
+});
 
-  const initialUserInfo = new UserInfo({
-    nameSelector: '.profile__name',
-    aboutSelector: '.profile__description',
-    avatarSelector: '.profile__avatar',
-  });
+const initialUserInfo = new UserInfo({
+  nameSelector: '.profile__name',
+  aboutSelector: '.profile__description',
+  avatarSelector: '.profile__avatar',
+});
+
+const makeNewCard = (cardData) => {
   
-  const popupImg = new PopupWithImage('.popup__mode_card-show');
-  popupImg.setEventListeners();
+};
 
-  const promises = [api.getCards(), api.getUser()];
-  Promise.all([api.getCards(), api.getUser()])
+
+
+const popupImg = new PopupWithImage('.popup__mode_card-show');
+popupImg.setEventListeners();
+
+Promise.all([api.getCards(), api.getUser()])
   .then(([cardsData, userData]) => {
     console.log(cardsData, userData);
-    initialUserInfo.renderUserInfo(userData);
+    user = userData;
+    initialUserInfo.setUserInfo(userData.name, userData.about, userData.avatar, userData.userId);
     cardsData.reverse();
-    
-    const section = new Section({cardsData, 
+    const cardList = new Section({
+      data: cardsData,
       renderer: (item) => {
-        const card = new Card(item, userData._id, {
-          handleCardClick:(item) => {
-            popupImg.open(item)
-            
-          },
-        handleLikeClick:(item, evt) => {
-        
-            const cardID = item._id;
-              if (evt.target.classList.contains('element__like_active')) {
-              deleteLike(cardID)
+        const card = new Card({cardData: item,
+          handleCardClick: (cardData) => popupImg.open(cardData),
+          handleLikeClick: (cardData, evt) => {
+            const cardID = cardData._id;
+            if (evt.target.classList.contains('element__like_active')) {
+              api.deleteLike(cardID)
                 .then((res) => {
                   evt.target.classList.remove('element__like_active');
-                  cardLikeCounter.textContent = res.likes.length;
+                  this._elementLikeCounter.textContent = res.likes.length;
                 })
                 .catch((err) => console.log(err));
             } else {
-              putLike(cardID)
+              api.putLike(cardID)
                 .then((res => {
                   evt.target.classList.add('element__like_active');
-                  cardLikeCounter.textContent = res.likes.length;
+                  this._elementLikeCounter.textContent = res.likes.length;
                 }))
                 .catch((err) => console.log(err));
-          }},
-        handleDeleteButtonClick:() => {
-          
-        }}, '.elements')
-    
-    }
-
+            }},
+          handleDeleteButtonClick: () => {
+            // аргумент: cardData, экземпляр попап подтверждения?.open(cardData)
+          } }, initialUserInfo.getId(), '#elements-item');
+        console.log(card);
+        const renderCard = card.generate();
+        cardList.addItem(renderCard);
+      }}, '.elements');
+    cardList.renderItems(cardsData);
   })
-    // .catch((err) => console.log(err));
-  }
-
-
-
-
-
-
-
-
-let user = undefined;
+  .catch((err) => console.log(err));
+ 
 
 
 // enableValidation({

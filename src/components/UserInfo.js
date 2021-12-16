@@ -16,22 +16,17 @@ export default class UserInfo {
         this._nameElement.textContent = user.name;
         this._aboutElement.textContent = user.about;
         this._avatarElement.src = user.avatar;
+        this._userId = user.userId;
     }
 
-    setUserInfo(name, about, avatar) {
+    setUserInfo(name, about, avatar, userId) {
         this._nameElement.textContent = name;
         this._aboutElement.textContent = about;
-        this._avatarElement.src = avatar;   
+        this._avatarElement.src = avatar;
+        this._userId = userId;   
     }
 
-    // может не надо?
-    // getId() {
-    //     return this._id = userId;
-    // }
-    
-
-    
-
-
-
+    getId() {
+        return this._userId;
+    }
 }
