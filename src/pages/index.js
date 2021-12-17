@@ -7,7 +7,8 @@ import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
-import {profileEdit, editAvatar, cardDeleteAccept, popups, placeAdd, profileContainer} from '../utils/constants.js';
+import {validationConfig, profileEdit, editAvatar, cardDeleteAccept, popups, placeAdd, 
+  profileContainer, editButton, placeAddButton, nameInput, descriptionInput, profileEditForm} from '../utils/constants.js';
 let user = undefined;
 
 const api = new Api ({
@@ -27,44 +28,75 @@ const initialUserInfo = new UserInfo({
 const makeNewCard = (cardData) => {
   
 };
-
+const validationEditProfile = new FormValidator(validationConfig, profileEditForm);
+validationEditProfile.enableValidation();
 
 
 const popupImg = new PopupWithImage('.popup__mode_card-show');
-popupImg.setEventListeners();
+  popupImg.setEventListeners();
+  
+const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSubmitForm: (inputsValue) => 
+  {
+    api.patchUser(inputsValue)
+
+    .then((res) => {
+      console.log(res)
+    })
+  }
+})
+popupUserEdit.setEventListeners();
+editButton.addEventListener('click',() => {
+  popupUserEdit.open()
+  nameInput.value = initialUserInfo.getUserInfo().name;
+  descriptionInput.value = initialUserInfo.getUserInfo().about;
+});
+
+const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: (inputsValue) => {
+
+}})
+popupAddCard.setEventListeners();
+placeAddButton.addEventListener('click',() => {
+  popupAddCard.open()
+  
+});
 
 Promise.all([api.getCards(), api.getUser()])
   .then(([cardsData, userData]) => {
-    console.log(cardsData, userData);
+    // console.log(cardsData, userData);
     user = userData;
+    const userId = userData._id;
     initialUserInfo.setUserInfo(userData.name, userData.about, userData.avatar, userData.userId);
     cardsData.reverse();
     const cardList = new Section({
       data: cardsData,
+
       renderer: (item) => {
+
         const card = new Card({cardData: item,
-          handleCardClick: (cardData) => popupImg.open(cardData),
-          handleLikeClick: (cardData, evt) => {
-            const cardID = cardData._id;
-            if (evt.target.classList.contains('element__like_active')) {
+          handleCardClick: (item) => popupImg.open(item),
+          handleLikeClick: (idCard, elementLike, counLike) => {
+
+            const cardID = item._id;
+            if (elementLike.classList.contains('element__like_active')) {
               api.deleteLike(cardID)
                 .then((res) => {
-                  evt.target.classList.remove('element__like_active');
-                  this._elementLikeCounter.textContent = res.likes.length;
+                  elementLike.classList.remove('element__like_active');
+                  counLike.textContent = res.likes.length;
                 })
                 .catch((err) => console.log(err));
+
             } else {
               api.putLike(cardID)
                 .then((res => {
-                  evt.target.classList.add('element__like_active');
-                  this._elementLikeCounter.textContent = res.likes.length;
+                  elementLike.classList.add('element__like_active');
+                  counLike.textContent = res.likes.length;
                 }))
                 .catch((err) => console.log(err));
             }},
+
           handleDeleteButtonClick: () => {
             // аргумент: cardData, экземпляр попап подтверждения?.open(cardData)
-          } }, initialUserInfo.getId(), '#elements-item');
-        console.log(card);
+          } }, userId, '#elements-item');
         const renderCard = card.generate();
         cardList.addItem(renderCard);
       }}, '.elements');
@@ -72,7 +104,6 @@ Promise.all([api.getCards(), api.getUser()])
   })
   .catch((err) => console.log(err));
  
-
 
 // enableValidation({
 //   formSelector: '.form',
