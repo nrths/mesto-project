@@ -72,7 +72,6 @@ export default class Card {
       this._elementTitle.textContent = this._name;
       this._elementLikeCounter.textContent = this._likes.length;
 
-      //this._getLikes();
       this._renderDeleteButton();
       this._spotLikeInitState();
       this._setEventListeners();

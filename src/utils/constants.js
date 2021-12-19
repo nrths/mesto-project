@@ -3,6 +3,7 @@ export const validationConfig = {
   inputSelector: '.form__item',
   submitButtonSelector: '.popup__submit',
   inputErrorClass: 'form__item_type_error',
+  errorClass: 'form_item-error',
 };
 
 export const profileContainer = document.querySelector('.profile');

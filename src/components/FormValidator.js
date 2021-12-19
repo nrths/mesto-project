@@ -1,74 +1,55 @@
 export default class FormValidator {
-    constructor(config, selector) {
-        this._config = config;
-        this._selector = selector;
-        this._inputList = Array.from(this._selector.querySelectorAll(config.inputSelector));
-        this._button = this._selector.querySelector(config.submitButtonSelector);
+    constructor(validationConfig, formElement) {
+      this._validationConfig = validationConfig;
+      this._formElement = document.querySelector(`${formElement}`);
+      this._inputList = Array.from(this._formElement.querySelectorAll(this._validationConfig.inputSelector));
+      this._submitButton = this._formElement.querySelector(this._validationConfig.submitButtonSelector);   
     }
 
-    enableValidation() {
-      this._setEventListeners();
-    }
-
-  //   clear() {
-  //     this._inputList.forEach((inputElement) => {
-  //       const errorElement = this._selector.querySelector(`#${inputElement.id}-error`);
-  //         this._hideInputError(errorElement, inputElement);
-  //       });
-  //     this._toggleButtonState();
-  // }
-  
-   // добавление слушателей всем полям ввода
-   _setEventListeners () {
-    this._selector.addEventListener('submit', evt => {
-      evt.preventDefault();
-    });
-
-    this._inputList.forEach(inputElement => {
-      inputElement.addEventListener('input', () => {
-        // check each input is valid
-        this._checkInputValidity(inputElement);
-        // toggle button state
-        this._toggleButtonState();
-      })
-      this._toggleButtonState();
-    });
+  // проверка валидности всех полей ввода
+  _isFormValid () {
+    this._inputList.every(inputElement => inputElement.validity.valid);
   };
+  // наличие невалидного инпута
+  _hasInvalidInput(){
+    return this._inputList.some((inputElement) => {
+      return !inputElement.validity.valid;
+    });
+  }
 
-  // валидация поля ввода
-  _checkInputValidity(inputElement) {
-    const errorElement = this._selector.querySelector(`#${inputElement.id}-error`);
-    if (!inputElement.validity.valid) {
-      this._showInputError(inputElement, errorElement);
-    } else {
-      this._hideInputError(inputElement, errorElement);
-    };
-  };
+  // поиск спана с ошибкой
+  _getErrorElement(inputElement) {
+    return this._formElement.querySelector(`#${inputElement.id}-error`);
+  }
 
-    // проверка валидности всех полей ввода (проверить аргумент)
-  _isFormValid (inputList) {
-      this._inputList.every(inputElement => inputElement.validity.valid);
-    };
-
-    // отображение ошибки валидации поля ввода
-  _showInputError(inputElement, errorElement) {
-    inputElement.classList.add(this._config.inputErrorClass);
+  // отображение ошибки валидации поля ввода
+  _showInputError(inputElement) {
+    const errorElement = this._getErrorElement(inputElement);
+    inputElement.classList.add(this._validationConfig.inputErrorClass);
+    errorElement.classList.add(this._validationConfig.errorClass);
     errorElement.textContent = inputElement.validationMessage;
   };
 
   // скрытие ошибки валидации поля ввода
-  _hideInputError(inputElement, errorElement) {
-    inputElement.classList.remove(this._config.inputErrorClass);
+  _hideInputError(inputElement) {
+    const errorElement = this._getErrorElement(inputElement);
+    inputElement.classList.remove(this._validationConfig.inputErrorClass);
+    errorElement.classList.remove(this._validationConfig.errorClass);
     errorElement.textContent = '';   
   };
 
-  _hasInvalidInput(){
-    return this._inputList.some( (inputElement) => {
-      return !inputElement.validity.valid;
-  });
-}
+  // валидация поля ввода
+  _checkInputValidity(inputElement) {
+    if (!inputElement.validity.valid) {
+      this._showInputError(inputElement);
+    } else {
+      this._hideInputError(inputElement);
+    };
+  };
+  
   // переключение состояния кнопки, в зависимости от валидности полей ввода
   _toggleButtonState () {
+    
     if(this._hasInvalidInput()) {
       this._disableButton();
     } else {
@@ -77,11 +58,35 @@ export default class FormValidator {
   };
  
   _disableButton() {
-    this._button.setAttribute('disabled', true);
+    this._submitButton.disabled = true;
   }
   
   _activeButton(){
-    this._button.removeAttribute('disabled', false);
+    this._submitButton.disabled = false;
   }
   
+  // добавление слушателей всем полям ввода
+  _setEventListeners () {
+    this._formElement.addEventListener('submit', evt => {
+      evt.preventDefault();
+    });
+
+    this._inputList.forEach(inputElement => {
+      inputElement.addEventListener('input', () => {
+        this._checkInputValidity(inputElement);
+        this._toggleButtonState();
+      })
+      
+      // слушатель и сброс валидации (наверное forEach + _hideInputError)
+
+      //this._isFormValid();
+      this._toggleButtonState();
+    });
+  };
+
+  // включение валидации полей ввода 
+  enableValidation() {
+    this._setEventListeners();
+  }
+
 }

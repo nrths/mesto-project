@@ -8,9 +8,10 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import {validationConfig, profileEdit, editAvatar, cardDeleteAccept, popups, placeAdd, 
-  profileContainer, editButton, placeAddButton, nameInput, descriptionInput, profileEditForm} from '../utils/constants.js';
+  profileContainer, editButton, placeAddButton, nameInput, descriptionInput, profileEditForm, avatarEditButton} from '../utils/constants.js';
 let user = undefined;
 
+// экземпляр класса Api
 const api = new Api ({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
   headers: {
@@ -19,53 +20,80 @@ const api = new Api ({
   },
 });
 
-const initialUserInfo = new UserInfo({
+// экземпляр класса UserInfo
+const profileInfo = new UserInfo({
   nameSelector: '.profile__name',
   aboutSelector: '.profile__description',
   avatarSelector: '.profile__avatar',
 });
 
-const makeNewCard = (cardData) => {
-  
-};
-const validationEditProfile = new FormValidator(validationConfig, profileEditForm);
-validationEditProfile.enableValidation();
+// экземпляры класса FormValidator для разных форм
+const editProfileFormValidation = new FormValidator(validationConfig, '.form[name="profile-edit-form"]');
+editProfileFormValidation.enableValidation();
+editProfileFormValidation._activeButton();
+
+const addCardFormValidation = new FormValidator(validationConfig, '.form[name="place-add-form"]');
+addCardFormValidation.enableValidation();
+
+const editAvatarFormValidation = new FormValidator(validationConfig, '.form[name="avatar-edit-form"]');
+editAvatarFormValidation.enableValidation();
 
 
-const popupImg = new PopupWithImage('.popup__mode_card-show');
-  popupImg.setEventListeners();
-  
-const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSubmitForm: (inputsValue) => 
-  {
-    api.patchUser(inputsValue)
 
+// экземпляры классов для попапов
+  // user edit  
+const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSubmitForm: (inputValues) => {   
+  api.patchUser(inputValues)
     .then((res) => {
-      console.log(res)
+      profileInfo.setUserInfo(res);
+      this.button.textContent = 'Сохранение...';
+      popupUserEdit.close();
     })
+    .catch((err) => {console.log(err)})
+    .finally(() => {
+      this.button.textContent = 'Сохранить';
+    });   
   }
-})
-popupUserEdit.setEventListeners();
-editButton.addEventListener('click',() => {
-  popupUserEdit.open()
-  nameInput.value = initialUserInfo.getUserInfo().name;
-  descriptionInput.value = initialUserInfo.getUserInfo().about;
 });
+popupUserEdit.setEventListeners();
+
+
 
 const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: (inputsValue) => {
 
 }})
 popupAddCard.setEventListeners();
+
+const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSubmitForm: (inputsValue) => {
+
+}});
+popupEditAvatar.setEventListeners();
+
+const popupImg = new PopupWithImage('.popup__mode_card-show');
+popupImg.setEventListeners();
+
+// слушатели событий на статичной странице
+editButton.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  popupUserEdit.open()
+  nameInput.value = profileInfo.getUserInfo().name;
+  descriptionInput.value = profileInfo.getUserInfo().about;
+});
+
 placeAddButton.addEventListener('click',() => {
-  popupAddCard.open()
-  
+  popupAddCard.open() 
+});
+
+avatarEditButton.addEventListener('click',() => {
+  popupEditAvatar.open()
 });
 
 Promise.all([api.getCards(), api.getUser()])
   .then(([cardsData, userData]) => {
-    // console.log(cardsData, userData);
+    console.log(cardsData, userData);
     user = userData;
     const userId = userData._id;
-    initialUserInfo.setUserInfo(userData.name, userData.about, userData.avatar, userData.userId);
+    profileInfo.setUserInfo(userData);
     cardsData.reverse();
     const cardList = new Section({
       data: cardsData,
@@ -74,14 +102,14 @@ Promise.all([api.getCards(), api.getUser()])
 
         const card = new Card({cardData: item,
           handleCardClick: (item) => popupImg.open(item),
-          handleLikeClick: (idCard, elementLike, counLike) => {
+          handleLikeClick: (idCard, elementLike, countLike) => {
 
             const cardID = item._id;
             if (elementLike.classList.contains('element__like_active')) {
               api.deleteLike(cardID)
                 .then((res) => {
                   elementLike.classList.remove('element__like_active');
-                  counLike.textContent = res.likes.length;
+                  countLike.textContent = res.likes.length;
                 })
                 .catch((err) => console.log(err));
 
@@ -89,7 +117,7 @@ Promise.all([api.getCards(), api.getUser()])
               api.putLike(cardID)
                 .then((res => {
                   elementLike.classList.add('element__like_active');
-                  counLike.textContent = res.likes.length;
+                  countLike.textContent = res.likes.length;
                 }))
                 .catch((err) => console.log(err));
             }},
@@ -103,7 +131,7 @@ Promise.all([api.getCards(), api.getUser()])
     cardList.renderItems(cardsData);
   })
   .catch((err) => console.log(err));
- 
+
 
 // enableValidation({
 //   formSelector: '.form',
