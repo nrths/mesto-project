@@ -28,18 +28,18 @@ export default class Api {
             headers: this._headers,
             body: JSON.stringify({
                 name: data.name, 
-                about: data.about,
-            }),
+                about: data.about
+            })
         }).then((res) => this._getResponse(res));
     };
     
-    patchAvatar(url) {
+    patchAvatar(data) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify({
-                avatar: url,
-            }),
+                avatar: data.avatar
+            })
         }).then((res) => this._getResponse(res));
     };
 

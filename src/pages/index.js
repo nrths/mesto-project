@@ -42,30 +42,53 @@ editAvatarFormValidation.enableValidation();
 
 // экземпляры классов для попапов
   // user edit  
-const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSubmitForm: (inputValues) => {   
+const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSubmitForm: (inputValues) => {  
+  
   api.patchUser(inputValues)
+  
     .then((res) => {
-      profileInfo.setUserInfo(res);
-      this.button.textContent = 'Сохранение...';
+      profileInfo.setUserInfo({avatar: res.avatar, name: res.name, about: res.about});
+      
+      // this.button.textContent = 'Сохранение...';
       popupUserEdit.close();
     })
     .catch((err) => {console.log(err)})
-    .finally(() => {
-      this.button.textContent = 'Сохранить';
-    });   
+    // .finally(() => {
+    //   this.button.textContent = 'Сохранить';
+    // });   
   }
 });
 popupUserEdit.setEventListeners();
 
 
+const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: (inputValues) => {
+  console.log(inputValues) 
 
-const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: (inputsValue) => {
+  api.postCard(inputValues)
 
+  .then((res) => {
+    cardList.addItem(res);
+    
+    // this.button.textContent = 'Сохранение...';
+    popupAddCard.close();
+  })
+  .catch((err) => {console.log(err)})
 }})
 popupAddCard.setEventListeners();
 
-const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSubmitForm: (inputsValue) => {
-
+//avatar edit
+const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSubmitForm: (inputValues) => {
+  api.patchAvatar(inputValues)
+  .then((res) => {
+    profileInfo.setUserInfo({avatar: res.avatar, name: res.name, about: res.about});
+    popupEditAvatar.close();
+  })
+  .catch((err) => {
+    console.log(err);
+  })
+    // .finally(() => {
+    //   this.button.textContent = 'Сохранить';
+    // });
 }});
 popupEditAvatar.setEventListeners();
 
@@ -90,7 +113,7 @@ avatarEditButton.addEventListener('click',() => {
 
 Promise.all([api.getCards(), api.getUser()])
   .then(([cardsData, userData]) => {
-    console.log(cardsData, userData);
+    // console.log(cardsData, userData);
     user = userData;
     const userId = userData._id;
     profileInfo.setUserInfo(userData);
