@@ -49,13 +49,13 @@ const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSub
     .then((res) => {
       profileInfo.setUserInfo({avatar: res.avatar, name: res.name, about: res.about});
       
-      // this.button.textContent = 'Сохранение...';
+      // profileEdit.textContent = 'Сохранение...';
       popupUserEdit.close();
     })
     .catch((err) => {console.log(err)})
-    // .finally(() => {
-    //   this.button.textContent = 'Сохранить';
-    // });   
+    .finally(() => {
+      // profileEdit.textContent = 'Сохранить';
+   });   
   }
 });
 popupUserEdit.setEventListeners();
@@ -68,7 +68,7 @@ const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitF
 
   .then((res) => {
     cardList.addItem(res);
-    
+  
     // this.button.textContent = 'Сохранение...';
     popupAddCard.close();
   })

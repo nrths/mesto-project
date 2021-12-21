@@ -71,6 +71,7 @@ export default class Card {
       this._elementImage.src = this._link;
       this._elementTitle.textContent = this._name;
       this._elementLikeCounter.textContent = this._likes.length;
+      this._element.setAttribute('data-id', this._id);
 
       this._renderDeleteButton();
       this._spotLikeInitState();

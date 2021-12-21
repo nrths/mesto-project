@@ -14,8 +14,8 @@ export const avatarEditButton = profileContainer.querySelector('.profile__avatar
 
 export const placeAdd = document.querySelector('.popup__mode_place-add');
 export const placeForm = placeAdd.querySelector('.form[name="place-add-form"]');
-export const placeName = placeForm.querySelector('.form__item[name="place-name"]');
-export const placeLink = placeForm.querySelector('.form__item[name="place-link"]');
+export const placeName = placeForm.querySelector('.form__item[name="name"]');
+export const placeLink = placeForm.querySelector('.form__item[name="link"]');
 export const placeSaveButton = placeAdd.querySelector('.popup__submit');
 
 export const profileEdit = document.querySelector('.popup__mode_profile-edit');
