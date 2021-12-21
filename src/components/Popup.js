@@ -1,6 +1,7 @@
 export default class Popup {
     constructor (popupSelector) {
         this._element = document.querySelector(popupSelector);
+        this.submitButton = this._element.querySelector('.popup__submit')
     }
 
     open() {
@@ -18,6 +19,10 @@ export default class Popup {
       this.close();
     }
   }
+
+  textLoading(isLoading) {
+    this.submitButton.textContent = isLoading ? 'Сохранение...' : 'Сохранить';
+}
 
     setEventListeners () {
         this._element.addEventListener('click', (evt) => {

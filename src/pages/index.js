@@ -44,18 +44,17 @@ editAvatarFormValidation.enableValidation();
 // экземпляры классов для попапов
   // user edit  
 const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSubmitForm: (inputValues) => {  
-  
+  popupUserEdit.textLoading(true);
   api.patchUser(inputValues)
-  
     .then((res) => {
+      popupUserEdit.textLoading(true)
       profileInfo.setUserInfo({avatar: res.avatar, name: res.name, about: res.about});
-      
-      // profileEdit.textContent = 'Сохранение...';
       popupUserEdit.close();
     })
     .catch((err) => {console.log(err)})
     .finally(() => {
-      // profileEdit.textContent = 'Сохранить';
+      popupUserEdit.textLoading(false);
+
    });   
   }
 });
@@ -63,22 +62,24 @@ popupUserEdit.setEventListeners();
 
 
 const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: (inputValues, cardList) => {
-  console.log(inputValues) 
-
+  popupAddCard.textLoading(true);
   api.postCard(inputValues)
-
-  .then((res) => {
-    cardList.addItem(res);
-  
-    // this.button.textContent = 'Сохранение...';
-    popupAddCard.close();
+    .then((res) => {
+      popupAddCard.textLoading(true);
+      console.log(res);
+      cardList.addItem(res);
+      popupAddCard.close();
   })
   .catch((err) => {console.log(err)})
+  .finally(() => {
+    popupAddCard.textLoading(false);
+  })
 }})
 popupAddCard.setEventListeners();
 
 //avatar edit
 const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSubmitForm: (inputValues) => {
+  popupEditAvatar.textLoading(true)
   api.patchAvatar(inputValues)
   .then((res) => {
     profileInfo.setUserInfo({avatar: res.avatar, name: res.name, about: res.about});
@@ -87,11 +88,13 @@ const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSu
   .catch((err) => {
     console.log(err);
   })
-    // .finally(() => {
-    //   this.button.textContent = 'Сохранить';
-    // });
+    .finally(() => {
+      popupEditAvatar.textLoading(false)
+
+    });
 }});
 popupEditAvatar.setEventListeners();
+// editAvatarFormValidation.clear();
 
 // экземпляр класса PopupConfirmDel
 const approveDeletePopup = new PopupConfirmDel('.popup__mode_accept-delete', {handleSubmit: () => {

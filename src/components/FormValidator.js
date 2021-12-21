@@ -77,16 +77,31 @@ export default class FormValidator {
         this._toggleButtonState();
       })
       
-      // слушатель и сброс валидации (наверное forEach + _hideInputError)
+      this._formElement.addEventListener('reset', () => {
+        this._inputList.forEach((inputElement) => {
+          this._hideInputError(inputElement)
+        })
+        if(this._hasInvalidInput === true) {
+          this._submitButton.disabled = true;
+          }
+        });
 
-      //this._isFormValid();
       this._toggleButtonState();
     });
+    
   };
 
   // включение валидации полей ввода 
   enableValidation() {
     this._setEventListeners();
   }
+
+// clear() {
+//   this._inputList.forEach((inputElement) => {
+//     this._hideInputError(inputElement)
+//   })
+
+//   this._submitButton.disabled = true;
+// }
 
 }
