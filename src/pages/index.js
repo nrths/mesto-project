@@ -5,6 +5,7 @@ import Card from '../components/Card.js';
 import FormValidator from '../components/FormValidator.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 import PopupWithImage from '../components/PopupWithImage.js';
+import PopupConfirmDel from '../components/PopupConfirmDel.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
 import {validationConfig, profileEdit, editAvatar, cardDeleteAccept, popups, placeAdd, 
@@ -61,7 +62,7 @@ const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSub
 popupUserEdit.setEventListeners();
 
 
-const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: (inputValues) => {
+const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: (inputValues, cardList) => {
   console.log(inputValues) 
 
   api.postCard(inputValues)
@@ -92,6 +93,21 @@ const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSu
 }});
 popupEditAvatar.setEventListeners();
 
+// экземпляр класса PopupConfirmDel
+const approveDeletePopup = new PopupConfirmDel('.popup__mode_accept-delete', {handleSubmit: () => {
+  const cardID = cardDeleteAccept.getAttribute('id');
+  const card = document.getElementById(cardID);
+  approveDeletePopup.textLoading(true);
+  api.deleteCard(cardID)
+    .then(() => {
+      card.remove();
+      approveDeletePopup.close();
+    })
+    .catch((err) => console.log(err))
+    .finally(() => approveDeletePopup.textLoading(false))
+}})
+
+// экземпляр класса PopupWithImage
 const popupImg = new PopupWithImage('.popup__mode_card-show');
 popupImg.setEventListeners();
 
@@ -125,8 +141,7 @@ Promise.all([api.getCards(), api.getUser()])
 
         const card = new Card({cardData: item,
           handleCardClick: (item) => popupImg.open(item),
-          handleLikeClick: (idCard, elementLike, countLike) => {
-
+          handleLikeClick: (elementLike, countLike) => {
             const cardID = item._id;
             if (elementLike.classList.contains('element__like_active')) {
               api.deleteLike(cardID)
@@ -145,8 +160,11 @@ Promise.all([api.getCards(), api.getUser()])
                 .catch((err) => console.log(err));
             }},
 
-          handleDeleteButtonClick: () => {
-            // аргумент: cardData, экземпляр попап подтверждения?.open(cardData)
+          handleDeleteButtonClick: (evt) => {
+            approveDeletePopup.open();
+            const card = evt.target.closest('.element');
+            const cardID = card.getAttribute('id', cardID);
+            cardDeleteAccept.setAttribute('id', cardID);
           } }, userId, '#elements-item');
         const renderCard = card.generate();
         cardList.addItem(renderCard);

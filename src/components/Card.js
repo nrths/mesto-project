@@ -12,7 +12,7 @@ export default class Card {
         this._selector = templateSelector;
         this._handleCardClick = handleCardClick;
         this._handleLikeClick = handleLikeClick;
-        this._handleDeleteButtonClick = handleDeleteButtonClick.bind(this);
+        this._handleDeleteButtonClick = handleDeleteButtonClick;
     }
     
     _getElement() {
@@ -54,6 +54,8 @@ export default class Card {
       })
     }
 
+    
+
     _renderDeleteButton() {
       if (this._ownerID !== this._userId) {
         this._elementDeleteButton.style.display = 'none';
@@ -71,7 +73,7 @@ export default class Card {
       this._elementImage.src = this._link;
       this._elementTitle.textContent = this._name;
       this._elementLikeCounter.textContent = this._likes.length;
-      this._element.setAttribute('data-id', this._id);
+      this._element.setAttribute('id', this._id);
 
       this._renderDeleteButton();
       this._spotLikeInitState();
