@@ -135,19 +135,23 @@ const cardList = new Section((item) => {
     handleCardClick: function(item) {
       popupImg.open(item);
     },
-    handleLikeClick: function() {
+    handleLikeClick: function(evt) {
       if (card._isLiked()) {
         api
           .deleteLike(card.getID())
           .then((res) => {
-            card._updateLikesState(res, true);
+            const likes = res.likes;
+            evt.target.classList.remove('element__like_active');
+            card._elementLikeCounter.textContent = likes.length; 
           })
           .catch((err) => console.log(err));
       } else {
         api
           .putLike(card.getID())
           .then((res) => {
-            card._updateLikesState(res, false);
+            const likes = res.likes;
+            evt.target.classList.add('element__like_active');
+            card._elementLikeCounter.textContent = likes.length;
           })
           .catch((err) => console.log(err));
       }},
@@ -163,7 +167,6 @@ const cardList = new Section((item) => {
 
 Promise.all([api.getUser(), api.getCards()])
 .then(([user, cards]) => {
-    console.log(user, cards);
     profileInfo.setUserID(user._id);
     profileInfo.setUserInfo(user);
     cardList.renderItems(cards);

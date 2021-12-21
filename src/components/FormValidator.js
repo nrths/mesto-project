@@ -95,13 +95,4 @@ export default class FormValidator {
   enableValidation() {
     this._setEventListeners();
   }
-
-// clear() {
-//   this._inputList.forEach((inputElement) => {
-//     this._hideInputError(inputElement)
-//   })
-
-//   this._submitButton.disabled = true;
-// }
-
 }

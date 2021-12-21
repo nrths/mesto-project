@@ -19,6 +19,4 @@ export default class Section {
             this.addItem(item);
       });
     }
-
-    
 }

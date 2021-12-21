@@ -36,15 +36,6 @@ export default class Card {
       return this._elementLike.classList.contains('element__like_active');
     }
 
-    _updateLikesState(data, isActive = true) {
-      if (isActive) {
-        this._elementLike.classList.remove('element__active');
-      } else {
-        this._elementLike.classList.add('element__active');
-      }
-      this._elementLikeCounter.textContent = this._likes.length; 
-    }
-
     _setEventListeners() {
       this._elementImage.addEventListener('click', () => {
         this._handleCardClick({
@@ -82,10 +73,7 @@ export default class Card {
       });
 
       this._renderDeleteButton();
-      this._updateLikesState();
       this._setEventListeners();
       return this._element;
-    }
-
-   
+    } 
 }
