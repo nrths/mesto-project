@@ -106,6 +106,7 @@ const approveDeletePopup = new PopupConfirmDel('.popup__mode_accept-delete', {ha
     .catch((err) => console.log(err))
     .finally(() => approveDeletePopup.textLoading(false))
 }})
+approveDeletePopup.setEventListeners();
 
 // экземпляр класса PopupWithImage
 const popupImg = new PopupWithImage('.popup__mode_card-show');
@@ -160,7 +161,7 @@ Promise.all([api.getCards(), api.getUser()])
                 .catch((err) => console.log(err));
             }},
 
-          handleDeleteButtonClick: (evt) => {
+          handleDeleteButtonClick: function (evt) {
             approveDeletePopup.open();
             const card = evt.target.closest('.element');
             const cardID = card.getAttribute('id', cardID);

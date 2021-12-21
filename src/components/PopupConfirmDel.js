@@ -7,13 +7,13 @@ export default class PopupConfirmDel extends Popup{
         this.submitButton = this._element.querySelector('.popup__submit');
     }
 
-    // textLoading(isLoading, buttonText='Да') {
-    //     if (isLoading) {
-    //         this.submitButton.textContent = 'Удаление...';
-    //     } else {
-    //         this.submitButton.textContent = buttonText;
-    //     }
-    // }
+    textLoading(isLoading, buttonText='Да') {
+        if (isLoading) {
+            this.submitButton.textContent = 'Удаление...';
+        } else {
+            this.submitButton.textContent = buttonText;
+        }
+    }
 
     setEventListeners() {
         super.setEventListeners();
