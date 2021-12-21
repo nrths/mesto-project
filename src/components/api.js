@@ -43,13 +43,13 @@ export default class Api {
         }).then((res) => this._getResponse(res));
     };
 
-    postCard(card) {
+    postCard(name, link) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
             headers: this._headers,
             body: JSON.stringify({
-                name: card.name,
-                link: card.link,
+                name,
+                link,
             }),
         }).then((res) => this._getResponse(res));
     };
