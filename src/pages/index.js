@@ -8,11 +8,12 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import PopupConfirmDel from '../components/PopupConfirmDel.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
-import {validationConfig, profileUsername, profileDescription, cardDeleteAccept, 
-  editButton, placeAddButton, nameInput, descriptionInput, profileEditFormSelector, 
-  placeFormSelector, editAvatarFormSelector, profileEditSelector, placeAddSelector, 
-  editAvatarSelector, cardDeleteAcceptSelector, popupCardShowSelector, templateCardSelector, 
-  likeActiveSelector, elementCardSelector, elementsCardSelector, profileAvatarSelector, avatarEditButton, cardConfig} from '../utils/constants.js';
+import {validationConfig, cardConfig, popupConfig, profileConfig,
+  editButton, placeAddButton, avatarEditButton,
+  nameInput, descriptionInput, profileEditSelector, profileEditFormSelector, 
+  editAvatarSelector, editAvatarFormSelector,  
+  placeAddSelector, placeFormSelector, popupCardShowSelector,
+  cardDeleteAcceptSelector, cardDeleteAccept } from '../utils/constants.js';
 
 // экземпляр класса Api
 const api = new Api ({
@@ -23,11 +24,7 @@ const api = new Api ({
   },
 });
 // экземпляр класса UserInfo
-const profileInfo = new UserInfo({
-  nameSelector: profileUsername,
-  aboutSelector: profileDescription,
-  avatarSelector: profileAvatarSelector,
-});
+const profileInfo = new UserInfo(profileConfig);
 
 // экземпляры класса FormValidator для разных форм
 const editProfileFormValidation = new FormValidator(validationConfig, profileEditFormSelector);
@@ -41,7 +38,7 @@ editAvatarFormValidation.enableValidation();
 
 // экземпляры классов для попапов
   // user edit  
-const popupUserEdit = new PopupWithForm(profileEditSelector, {handlerSubmitForm: (inputValues) => {  
+const popupUserEdit = new PopupWithForm(profileEditSelector, popupConfig, {handlerSubmitForm: (inputValues) => {  
   popupUserEdit.renderLoading(true);
   api.patchUser(inputValues)
     .then((res) => {
@@ -58,7 +55,7 @@ const popupUserEdit = new PopupWithForm(profileEditSelector, {handlerSubmitForm:
 popupUserEdit.setEventListeners();
 
   // add card
-const popupAddCard = new PopupWithForm(placeAddSelector, {handlerSubmitForm: function(inputValues) {
+const popupAddCard = new PopupWithForm(placeAddSelector, popupConfig, {handlerSubmitForm: function(inputValues) {
   popupAddCard.renderLoading(true);
   const { name, link } = inputValues;
   api.postCard(name, link)
@@ -74,7 +71,7 @@ const popupAddCard = new PopupWithForm(placeAddSelector, {handlerSubmitForm: fun
 popupAddCard.setEventListeners();
 
   // avatar edit
-const popupEditAvatar = new PopupWithForm(editAvatarSelector, {handlerSubmitForm: (inputValues) => {
+const popupEditAvatar = new PopupWithForm(editAvatarSelector, popupConfig, {handlerSubmitForm: (inputValues) => {
   popupEditAvatar.renderLoading(true)
   api.patchAvatar(inputValues)
   .then((res) => {
@@ -92,7 +89,7 @@ const popupEditAvatar = new PopupWithForm(editAvatarSelector, {handlerSubmitForm
 popupEditAvatar.setEventListeners();
 
 // экземпляр класса PopupConfirmDel
-const approveDeletePopup = new PopupConfirmDel(cardDeleteAcceptSelector, {handleSubmit: () => {
+const approveDeletePopup = new PopupConfirmDel(cardDeleteAcceptSelector, popupConfig, {handleSubmit: () => {
   const cardID = cardDeleteAccept.getAttribute('id');
   const card = document.getElementById(cardID);
   approveDeletePopup.renderLoading(true);
@@ -107,7 +104,7 @@ const approveDeletePopup = new PopupConfirmDel(cardDeleteAcceptSelector, {handle
 approveDeletePopup.setEventListeners();
 
 // экземпляр класса PopupWithImage
-const popupImg = new PopupWithImage(popupCardShowSelector);
+const popupImg = new PopupWithImage(popupCardShowSelector, popupConfig);
 popupImg.setEventListeners();
 
 // слушатели событий на статичной странице
