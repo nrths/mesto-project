@@ -1,9 +1,7 @@
-import { elementCardSelector, elementImageSelector, elementTitleSelector, likeActiveSelector } from "../utils/constants";
-
 export default class Card {
     constructor({ _id, name, link, likes, owner }, templateSelector, 
       { handleCardClick, handleLikeClick, handleDeleteButtonClick },
-      userId) {
+      userId, cardConfig) {
         this._id = _id;
         this._link = link;
         this._name = name;
@@ -14,17 +12,18 @@ export default class Card {
         this._handleCardClick = handleCardClick;
         this._handleLikeClick = handleLikeClick;
         this._handleDeleteButtonClick = handleDeleteButtonClick;
+        this._cardConfig = cardConfig;
         this._element = this._getElement();
-        this._elementLike = this._element.querySelector('.element__like');
-        this._elementLikeCounter = this._element.querySelector('.element__like-count');
-        this._elementDeleteButton = this._element.querySelector('.element__delete-button');
+        this._elementLike = this._element.querySelector(this._cardConfig.likeButtonSelector);
+        this._elementLikeCounter = this._element.querySelector(this._cardConfig.likeCounterSelector);
+        this._elementDeleteButton = this._element.querySelector(this._cardConfig.deleteButtonSelector);
     }
     
     _getElement() {
       const cardElement = document
         .querySelector(this._selector)
         .content
-        .querySelector(elementCardSelector)
+        .querySelector(this._cardConfig.elementCardSelector)
         .cloneNode(true);
       
       return cardElement;
@@ -34,8 +33,8 @@ export default class Card {
       return this._id;
     }
 
-    _isLiked() {
-      return this._elementLike.classList.contains(likeActiveSelector);
+    isLiked() {
+      return this._elementLike.classList.contains(this._cardConfig.likeActiveClass);
     }
 
     _setEventListeners() {
@@ -60,8 +59,8 @@ export default class Card {
     }
 
     generate() {      
-      this._elementImage =  this._element.querySelector(elementImageSelector);
-      this._elementTitle = this._element.querySelector(elementTitleSelector);     
+      this._elementImage =  this._element.querySelector(this._cardConfig.elementImageSelector);
+      this._elementTitle = this._element.querySelector(this._cardConfig.elementTitleSelector);     
 
       this._elementImage.src = this._link;
       this._elementTitle.textContent = this._name;
@@ -70,7 +69,7 @@ export default class Card {
 
       this._likes.some(el => {
         if (el._id === this._userId) {
-          this._elementLike.classList.add(likeActiveSelector);
+          this._elementLike.classList.add(this._cardConfig.likeActiveClass);
         }
       });
 
@@ -78,4 +77,15 @@ export default class Card {
       this._setEventListeners();
       return this._element;
     } 
+    updateLikes(data, evt) {
+      const likes = data.likes;
+      if (this._elementLike.classList.contains(this._cardConfig.likeActiveClass)) {
+        evt.target.classList.remove(this._cardConfig.likeActiveClass);
+        this._elementLikeCounter.textContent = likes.length; 
+      } else {
+        evt.target.classList.add(this._cardConfig.likeActiveClass);
+        this._elementLikeCounter.textContent = likes.length; 
+      }
+
+    }
 }

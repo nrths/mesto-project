@@ -1,12 +1,26 @@
-export const popupSubmitSelector = '.popup__submit';
-
 export const validationConfig = {
   formSelector: '.form',
   inputSelector: '.form__item',
-  submitButtonSelector: popupSubmitSelector,
+  submitButtonSelector: '.popup__submit',
   inputErrorClass: 'form__item_type_error',
   errorClass: 'form_item-error',
 };
+export const cardConfig = {
+  elementCardSelector : '.element',
+  elementImageSelector: '.element__image',
+  elementTitleSelector: '.element__title',
+  likeActiveClass: 'element__like_active',
+  likeButtonSelector: '.element__like',
+  likeCounterSelector: '.element__like-count',
+  deleteButtonSelector: '.element__delete-button',
+  templateCardSelector: '#elements-item',
+};
+export const popupConfig = {
+  popupOpenedClass: 'popup_opened',
+  popupButtonCloseClass: 'popup__button_assignment_close',
+  popupSubmitSelector: '.popup__submit',
+};
+
 
 
 export const popupOpenedClass = 'popup_opened';

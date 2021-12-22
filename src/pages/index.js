@@ -12,7 +12,7 @@ import {validationConfig, profileUsername, profileDescription, cardDeleteAccept,
   editButton, placeAddButton, nameInput, descriptionInput, profileEditFormSelector, 
   placeFormSelector, editAvatarFormSelector, profileEditSelector, placeAddSelector, 
   editAvatarSelector, cardDeleteAcceptSelector, popupCardShowSelector, templateCardSelector, 
-  likeActiveSelector, elementCardSelector, elementsCardSelector, profileAvatarSelector, avatarEditButton} from '../utils/constants.js';
+  likeActiveSelector, elementCardSelector, elementsCardSelector, profileAvatarSelector, avatarEditButton, cardConfig} from '../utils/constants.js';
 
 // экземпляр класса Api
 const api = new Api ({
@@ -129,40 +129,36 @@ avatarEditButton.addEventListener('click',() => {
 
 const cardList = new Section((item) => {
   const userID = profileInfo.getUserID();
-  const card = new Card(item, templateCardSelector,
+  const card = new Card(item, cardConfig.templateCardSelector,
   { 
     handleCardClick: function(item) {
       popupImg.open(item);
     },
     handleLikeClick: function(evt) {
-      if (card._isLiked()) {
+      if (card.isLiked()) {
         api
           .deleteLike(card.getID())
           .then((res) => {
-            const likes = res.likes;
-            evt.target.classList.remove(likeActiveSelector);
-            card._elementLikeCounter.textContent = likes.length; 
+            card.updateLikes(res, evt) 
           })
           .catch((err) => console.log(err));
       } else {
         api
           .putLike(card.getID())
           .then((res) => {
-            const likes = res.likes;
-            evt.target.classList.add(likeActiveSelector);
-            card._elementLikeCounter.textContent = likes.length;
+            card.updateLikes(res, evt)
           })
           .catch((err) => console.log(err));
       }},
       handleDeleteButtonClick: function (evt) {
         approveDeletePopup.open();
-        const card = evt.target.closest(elementCardSelector);
+        const card = evt.target.closest(cardConfig.elementCardSelector);
         const cardID = card.getAttribute('id', cardID);
         cardDeleteAccept.setAttribute('id', cardID);
       }
-  }, userID);
+  }, userID, cardConfig);
   return card.generate();
-}, elementsCardSelector);
+}, '.elements');
 
 Promise.all([api.getUser(), api.getCards()])
 .then(([user, cards]) => {
