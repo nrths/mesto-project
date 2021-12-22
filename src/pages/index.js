@@ -14,8 +14,6 @@ import {validationConfig, profileUsername, profileDescription, cardDeleteAccept,
   editAvatarSelector, cardDeleteAcceptSelector, popupCardShowSelector, templateCardSelector, 
   likeActiveSelector, elementCardSelector, elementsCardSelector, profileAvatarSelector, avatarEditButton} from '../utils/constants.js';
 
-let user = undefined;
-
 // экземпляр класса Api
 const api = new Api ({
   baseUrl: 'https://nomoreparties.co/v1/plus-cohort-4',
