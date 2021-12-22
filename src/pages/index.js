@@ -32,7 +32,6 @@ const profileInfo = new UserInfo({
 // экземпляры класса FormValidator для разных форм
 const editProfileFormValidation = new FormValidator(validationConfig, profileEditFormSelector);
 editProfileFormValidation.enableValidation();
-editProfileFormValidation._activeButton();
 
 const addCardFormValidation = new FormValidator(validationConfig, placeFormSelector);
 addCardFormValidation.enableValidation();
@@ -43,16 +42,15 @@ editAvatarFormValidation.enableValidation();
 // экземпляры классов для попапов
   // user edit  
 const popupUserEdit = new PopupWithForm(profileEditSelector, {handlerSubmitForm: (inputValues) => {  
-  popupUserEdit.textLoading(true);
+  popupUserEdit.renderLoading(true);
   api.patchUser(inputValues)
     .then((res) => {
-      popupUserEdit.textLoading(true)
       profileInfo.setUserInfo({avatar: res.avatar, name: res.name, about: res.about});
       popupUserEdit.close();
     })
     .catch((err) => {console.log(err)})
     .finally(() => {
-      popupUserEdit.textLoading(false);
+      popupUserEdit.renderLoading(false);
 
    });   
   }
@@ -60,9 +58,9 @@ const popupUserEdit = new PopupWithForm(profileEditSelector, {handlerSubmitForm:
 popupUserEdit.setEventListeners();
 
   // add card
-const popupAddCard = new PopupWithForm(placeAddSelector, {handlerSubmitForm: function() {
-  popupAddCard.textLoading(true);
-  const { name, link } = popupAddCard._getInputValues();
+const popupAddCard = new PopupWithForm(placeAddSelector, {handlerSubmitForm: function(inputValues) {
+  popupAddCard.renderLoading(true);
+  const { name, link } = inputValues;
   api.postCard(name, link)
     .then((res) => {
       cardList.addItem(res);
@@ -70,14 +68,14 @@ const popupAddCard = new PopupWithForm(placeAddSelector, {handlerSubmitForm: fun
   })
   .catch((err) => console.log(err))
   .finally(() => {
-    popupAddCard.textLoading(false);
+    popupAddCard.renderLoading(false);
   })
 }})
 popupAddCard.setEventListeners();
 
   // avatar edit
 const popupEditAvatar = new PopupWithForm(editAvatarSelector, {handlerSubmitForm: (inputValues) => {
-  popupEditAvatar.textLoading(true)
+  popupEditAvatar.renderLoading(true)
   api.patchAvatar(inputValues)
   .then((res) => {
     profileInfo.setUserInfo({avatar: res.avatar, name: res.name, about: res.about});
@@ -87,7 +85,7 @@ const popupEditAvatar = new PopupWithForm(editAvatarSelector, {handlerSubmitForm
     console.log(err);
   })
     .finally(() => {
-      popupEditAvatar.textLoading(false)
+      popupEditAvatar.renderLoading(false)
 
     });
 }});
@@ -97,14 +95,14 @@ popupEditAvatar.setEventListeners();
 const approveDeletePopup = new PopupConfirmDel(cardDeleteAcceptSelector, {handleSubmit: () => {
   const cardID = cardDeleteAccept.getAttribute('id');
   const card = document.getElementById(cardID);
-  approveDeletePopup.textLoading(true);
+  approveDeletePopup.renderLoading(true);
   api.deleteCard(cardID)
     .then(() => {
       card.remove();
       approveDeletePopup.close();
     })
     .catch((err) => console.log(err))
-    .finally(() => approveDeletePopup.textLoading(false))
+    .finally(() => approveDeletePopup.renderLoading(false))
 }})
 approveDeletePopup.setEventListeners();
 
@@ -115,9 +113,10 @@ popupImg.setEventListeners();
 // слушатели событий на статичной странице
 editButton.addEventListener('click', (evt) => {
   evt.preventDefault();
-  popupUserEdit.open()
-  nameInput.value = profileInfo.getUserInfo().name;
-  descriptionInput.value = profileInfo.getUserInfo().about;
+  popupUserEdit.open();
+  const profile = profileInfo.getUserInfo();
+  nameInput.value = profile.name;
+  descriptionInput.value = profile.about;
 });
 
 placeAddButton.addEventListener('click',() => {

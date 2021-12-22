@@ -3,17 +3,17 @@ import { popupOpenedClass, popupSubmitSelector } from "../utils/constants";
 export default class Popup {
     constructor (popupSelector) {
         this._element = document.querySelector(popupSelector);
-        this.submitButton = this._element.querySelector(popupSubmitSelector)
+        this._handleEscClose = this._handleEscClose.bind(this);
     }
 
     open() {
         this._element.classList.add(popupOpenedClass);
-        document.addEventListener('keydown', this._handleEscClose.bind(this));
+        document.addEventListener('keydown', this._handleEscClose);
     }
 
     close() {
         this._element.classList.remove(popupOpenedClass);
-        document.removeEventListener('keydown', this._handleEscClose.bind(this));
+        document.removeEventListener('keydown', this._handleEscClose);
     }
 
     _handleEscClose(evt) {
@@ -21,10 +21,6 @@ export default class Popup {
       this.close();
     }
   }
-
-  textLoading(isLoading) {
-    this.submitButton.textContent = isLoading ? 'Сохранение...' : 'Сохранить';
-}
 
     setEventListeners () {
         this._element.addEventListener('click', (evt) => {

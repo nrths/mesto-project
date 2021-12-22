@@ -8,7 +8,7 @@ export default class PopupConfirmDel extends Popup{
         this.submitButton = this._element.querySelector(popupSubmitSelector);
     }
 
-    textLoading(isLoading, buttonText='Да') {
+    renderLoading(isLoading, buttonText='Да') {
         if (isLoading) {
             this.submitButton.textContent = 'Удаление...';
         } else {
