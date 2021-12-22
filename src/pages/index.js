@@ -8,8 +8,12 @@ import PopupWithImage from '../components/PopupWithImage.js';
 import PopupConfirmDel from '../components/PopupConfirmDel.js';
 import Section from '../components/Section.js';
 import UserInfo from '../components/UserInfo.js';
-import {validationConfig, profileEdit, editAvatar, cardDeleteAccept, popups, placeAdd, 
-  profileContainer, editButton, placeAddButton, nameInput, descriptionInput, profileEditForm, avatarEditButton} from '../utils/constants.js';
+import {validationConfig, profileUsername, profileDescription, cardDeleteAccept, 
+  editButton, placeAddButton, nameInput, descriptionInput, profileEditFormSelector, 
+  placeFormSelector, editAvatarFormSelector, profileEditSelector, placeAddSelector, 
+  editAvatarSelector, cardDeleteAcceptSelector, popupCardShowSelector, templateCardSelector, 
+  likeActiveSelector, elementCardSelector, elementsCardSelector, profileAvatarSelector, avatarEditButton} from '../utils/constants.js';
+
 let user = undefined;
 
 // экземпляр класса Api
@@ -20,28 +24,27 @@ const api = new Api ({
       'Content-type': 'application/json',
   },
 });
-
 // экземпляр класса UserInfo
 const profileInfo = new UserInfo({
-  nameSelector: '.profile__name',
-  aboutSelector: '.profile__description',
-  avatarSelector: '.profile__avatar',
+  nameSelector: profileUsername,
+  aboutSelector: profileDescription,
+  avatarSelector: profileAvatarSelector,
 });
 
 // экземпляры класса FormValidator для разных форм
-const editProfileFormValidation = new FormValidator(validationConfig, '.form[name="profile-edit-form"]');
+const editProfileFormValidation = new FormValidator(validationConfig, profileEditFormSelector);
 editProfileFormValidation.enableValidation();
 editProfileFormValidation._activeButton();
 
-const addCardFormValidation = new FormValidator(validationConfig, '.form[name="place-add-form"]');
+const addCardFormValidation = new FormValidator(validationConfig, placeFormSelector);
 addCardFormValidation.enableValidation();
 
-const editAvatarFormValidation = new FormValidator(validationConfig, '.form[name="avatar-edit-form"]');
+const editAvatarFormValidation = new FormValidator(validationConfig, editAvatarFormSelector);
 editAvatarFormValidation.enableValidation();
 
 // экземпляры классов для попапов
   // user edit  
-const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSubmitForm: (inputValues) => {  
+const popupUserEdit = new PopupWithForm(profileEditSelector, {handlerSubmitForm: (inputValues) => {  
   popupUserEdit.textLoading(true);
   api.patchUser(inputValues)
     .then((res) => {
@@ -59,7 +62,7 @@ const popupUserEdit = new PopupWithForm('.popup__mode_profile-edit', {handlerSub
 popupUserEdit.setEventListeners();
 
   // add card
-const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitForm: function() {
+const popupAddCard = new PopupWithForm(placeAddSelector, {handlerSubmitForm: function() {
   popupAddCard.textLoading(true);
   const { name, link } = popupAddCard._getInputValues();
   api.postCard(name, link)
@@ -75,7 +78,7 @@ const popupAddCard = new PopupWithForm('.popup__mode_place-add', {handlerSubmitF
 popupAddCard.setEventListeners();
 
   // avatar edit
-const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSubmitForm: (inputValues) => {
+const popupEditAvatar = new PopupWithForm(editAvatarSelector, {handlerSubmitForm: (inputValues) => {
   popupEditAvatar.textLoading(true)
   api.patchAvatar(inputValues)
   .then((res) => {
@@ -92,9 +95,8 @@ const popupEditAvatar = new PopupWithForm('.popup__mode_avatar-edit', {handlerSu
 }});
 popupEditAvatar.setEventListeners();
 
-
 // экземпляр класса PopupConfirmDel
-const approveDeletePopup = new PopupConfirmDel('.popup__mode_accept-delete', {handleSubmit: () => {
+const approveDeletePopup = new PopupConfirmDel(cardDeleteAcceptSelector, {handleSubmit: () => {
   const cardID = cardDeleteAccept.getAttribute('id');
   const card = document.getElementById(cardID);
   approveDeletePopup.textLoading(true);
@@ -109,7 +111,7 @@ const approveDeletePopup = new PopupConfirmDel('.popup__mode_accept-delete', {ha
 approveDeletePopup.setEventListeners();
 
 // экземпляр класса PopupWithImage
-const popupImg = new PopupWithImage('.popup__mode_card-show');
+const popupImg = new PopupWithImage(popupCardShowSelector);
 popupImg.setEventListeners();
 
 // слушатели событий на статичной странице
@@ -130,7 +132,7 @@ avatarEditButton.addEventListener('click',() => {
 
 const cardList = new Section((item) => {
   const userID = profileInfo.getUserID();
-  const card = new Card(item, '#elements-item',
+  const card = new Card(item, templateCardSelector,
   { 
     handleCardClick: function(item) {
       popupImg.open(item);
@@ -141,7 +143,7 @@ const cardList = new Section((item) => {
           .deleteLike(card.getID())
           .then((res) => {
             const likes = res.likes;
-            evt.target.classList.remove('element__like_active');
+            evt.target.classList.remove(likeActiveSelector);
             card._elementLikeCounter.textContent = likes.length; 
           })
           .catch((err) => console.log(err));
@@ -150,20 +152,20 @@ const cardList = new Section((item) => {
           .putLike(card.getID())
           .then((res) => {
             const likes = res.likes;
-            evt.target.classList.add('element__like_active');
+            evt.target.classList.add(likeActiveSelector);
             card._elementLikeCounter.textContent = likes.length;
           })
           .catch((err) => console.log(err));
       }},
       handleDeleteButtonClick: function (evt) {
         approveDeletePopup.open();
-        const card = evt.target.closest('.element');
+        const card = evt.target.closest(elementCardSelector);
         const cardID = card.getAttribute('id', cardID);
         cardDeleteAccept.setAttribute('id', cardID);
       }
   }, userID);
   return card.generate();
-}, '.elements');
+}, elementsCardSelector);
 
 Promise.all([api.getUser(), api.getCards()])
 .then(([user, cards]) => {

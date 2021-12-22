@@ -25,5 +25,5 @@ __[GitHubPages](https://nrths.github.io/mesto-project/)__
 ## Authors (github, e-mail)
 
 - [Элина Биишева](https://github.com/nrths): northnosouth@gmail.com
-- [Оксана Красильникова](https://github.com/bel4enka): 
+- [Оксана Красильникова](https://github.com/bel4enka): oxidjini@yandex.ru
 

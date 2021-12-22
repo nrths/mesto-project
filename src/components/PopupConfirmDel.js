@@ -1,10 +1,11 @@
+import { popupSubmitSelector } from "../utils/constants";
 import Popup from "./Popup";
 
 export default class PopupConfirmDel extends Popup{
     constructor (popupSelector, {handleSubmit}) {
         super(popupSelector)
         this._handleSubmit = handleSubmit;
-        this.submitButton = this._element.querySelector('.popup__submit');
+        this.submitButton = this._element.querySelector(popupSubmitSelector);
     }
 
     textLoading(isLoading, buttonText='Да') {

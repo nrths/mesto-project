@@ -1,3 +1,5 @@
+import { elementCardSelector, elementImageSelector, elementTitleSelector, likeActiveSelector } from "../utils/constants";
+
 export default class Card {
     constructor({ _id, name, link, likes, owner }, templateSelector, 
       { handleCardClick, handleLikeClick, handleDeleteButtonClick },
@@ -22,7 +24,7 @@ export default class Card {
       const cardElement = document
         .querySelector(this._selector)
         .content
-        .querySelector('.element')
+        .querySelector(elementCardSelector)
         .cloneNode(true);
       
       return cardElement;
@@ -33,7 +35,7 @@ export default class Card {
     }
 
     _isLiked() {
-      return this._elementLike.classList.contains('element__like_active');
+      return this._elementLike.classList.contains(likeActiveSelector);
     }
 
     _setEventListeners() {
@@ -58,8 +60,8 @@ export default class Card {
     }
 
     generate() {      
-      this._elementImage =  this._element.querySelector('.element__image');
-      this._elementTitle = this._element.querySelector('.element__title');     
+      this._elementImage =  this._element.querySelector(elementImageSelector);
+      this._elementTitle = this._element.querySelector(elementTitleSelector);     
 
       this._elementImage.src = this._link;
       this._elementTitle.textContent = this._name;
@@ -68,7 +70,7 @@ export default class Card {
 
       this._likes.some(el => {
         if (el._id === this._userId) {
-          this._elementLike.classList.add('element__like_active');
+          this._elementLike.classList.add(likeActiveSelector);
         }
       });
 
