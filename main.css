@@ -35,7 +35,7 @@
 .popup__button{border:none;padding:0}.popup__button:hover{opacity:.6;transition:opacity .5s linear}
 .popup__button_assignment_close{background-color:transparent;background-image:url(2ceb783afbab75916ddc.svg);background-position:50%;background-repeat:no-repeat;background-size:contain;height:32px;position:absolute;right:-10%;top:-40px;width:32px}.popup__button_assignment_close:hover{color:#fff;cursor:pointer;opacity:.6;transition:color .5s linear}@media (max-width:600px){.popup__button_assignment_close{height:20px;right:0;top:-36px;width:20px}}
 .popup__submit{background-color:#000;border-radius:2px;color:#fff;font-family:inherit;font-size:18px;font-weight:400;height:50px;line-height:22px;text-align:center;width:358px}.popup__submit:hover{color:#fff;cursor:pointer;opacity:.6;transition:color .5s linear}.popup__submit:disabled{background-color:transparent;border:1px solid rgba(0,0,0,.2);color:rgba(0,0,0,.2)}@media (max-width:600px){.popup__submit{font-size:14px;height:46px;line-height:17px;margin-top:15px;width:238px}}
-.popup__submit_mode_avatar-edit{margin-top:48px}
+.popup__submit_mode_avatar-edit{margin-top:24px}
 .popup__figure{margin:auto}
 .popup__figure-image{max-height:75vh;max-width:75vw;-o-object-fit:contain;object-fit:contain;-o-object-position:center;object-position:center}
 .popup__figcaption{color:#fff;font-size:12px;font-weight:400;line-height:1.25;margin-top:10px}
