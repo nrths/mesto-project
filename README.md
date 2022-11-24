@@ -20,5 +20,3 @@
 * Media Queries  
 * Java Script (ECMA2015)  
 * Webpack Build
-
-__[GitHubPages](https://nrths.github.io/mesto-project/)__ 
