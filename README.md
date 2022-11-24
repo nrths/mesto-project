@@ -20,8 +20,6 @@
     * OOP Refactoring
 * Webpack Build
 
-__[GitHubPages](https://nrths.github.io/mesto-project/)__ 
-
 ## Authors (github, e-mail)
 
 - [Элина Биишева](https://github.com/nrths): northnosouth@gmail.com
